@@ -1,3 +1,5 @@
+import type { Dirent } from 'node:fs'
+
 import { access, readdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { Hono } from 'hono'
@@ -12,7 +14,7 @@ import errorHandler from './middlewares/error-handler'
 import { response } from './utils/response'
 
 export class Server {
-	private app: Hono
+	readonly app: Hono
 
 	constructor(app: Hono) {
 		this.app = app
@@ -50,14 +52,32 @@ export class Server {
 		this.availableRoutes()
 	}
 
+	private async loadFeature(): Promise<[string, Dirent[] | null]> {
+		const featuresDir = resolve(import.meta.dir, 'features')
+
+		try {
+			await access(featuresDir)
+		} catch {
+			logger.warn('Features directory not found, skipping route loading')
+			return [featuresDir, null]
+		}
+
+		const featureFolders = await readdir(featuresDir, { withFileTypes: true })
+		if (featureFolders.length > 0) {
+			logger.info('Available features:')
+		}
+
+		return [featuresDir, featureFolders]
+	}
+
 	private async loadRouter() {
 		try {
-			const featuresDir = resolve(import.meta.dir, 'features')
-			const featureFolders = await readdir(featuresDir, { withFileTypes: true })
-
-			if (featureFolders.length > 0) {
-				logger.info('Available features:')
+			const [featuresDir, featureFolders] = await this.loadFeature()
+			if (!featureFolders) {
+				return
 			}
+
+			const ext = IS_PRODUCTION ? 'js' : 'ts'
 
 			for (const folder of featureFolders) {
 				if (!folder.isDirectory()) {
@@ -69,7 +89,7 @@ export class Server {
 					continue
 				}
 
-				const routePath = resolve(featuresDir, name, 'routes.ts')
+				const routePath = resolve(featuresDir, name, `routes.${ext}`)
 
 				try {
 					await access(routePath)

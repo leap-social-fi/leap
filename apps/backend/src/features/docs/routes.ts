@@ -8,9 +8,9 @@ import { openAPIRouteHandler } from 'hono-openapi'
 import config from '@/libs/config'
 
 class Docs {
-	private app: Hono
-	private conf: EnvVarsSchemaType
-	private basePath: string
+	readonly app: Hono
+	readonly conf: EnvVarsSchemaType
+	readonly basePath: string
 
 	constructor(app: Hono, basePath = '/docs') {
 		this.app = app
