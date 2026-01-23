@@ -1,0 +1,15 @@
+{
+  "extends": "@leap/typescript-config/api.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "outDir": "./dist"
+  },
+  "references": [
+    { "path": "../../packages/shared/tsconfig.app.json" }
+  ],
+  "include": ["src"]
+}
