@@ -1,0 +1,16 @@
+{
+  "extends": "@leap/typescript-config/react.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+    },
+    "noEmit": true,
+    "outDir": "./dist"
+  },
+  "references": [
+    { "path": "../../packages/shared/tsconfig.app.json" }
+  ],
+  "include": ["src", "vite.config.ts"]
+}
