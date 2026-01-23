@@ -20,7 +20,7 @@ max_line_length = off
 indent_style = tab
 
 # Set indentation size to 2 for JavaScript files
-[*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue,css,scss,sass,less,styl}]
+[*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue,css,scss,sass,less,styl,html}]
 indent_size = 2
 
 # Set indentation size to 2 for JSON, YAML, and related files
