@@ -21,10 +21,11 @@
     "check": "biome check ./src --write"
   },
   "dependencies": {
-    "hono": "^4.11.5",
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@leap/typescript-config": "workspace:*"
+    "@leap/typescript-config": "workspace:*",
+    "concurrently": "^9.2.1",
+    "tsc-alias": "^1.8.16"
   }
 }
