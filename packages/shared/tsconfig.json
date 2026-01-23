@@ -1,0 +1,8 @@
+{
+  "extends": "@leap/typescript-config/base.json",
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.bun.json" }
+  ],
+  "files": []
+}

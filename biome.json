@@ -166,7 +166,7 @@
               ],
               ":BLANK_LINE:",
               [
-                "@wiyora/**"
+                "@leap/**"
               ]
             ]
           }

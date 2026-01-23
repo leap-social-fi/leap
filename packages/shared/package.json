@@ -1,0 +1,30 @@
+{
+  "name": "@leap/shared",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    "./constants/*": "./src/constants/*.ts",
+    "./types/*": "./src/types/*.ts",
+    "./schema/*": "./src/schema/*.ts",
+    "./utils/*": "./src/utils/*.ts"
+  },
+  "scripts": {
+    "build": "bunx --bun tsc --build && bunx --bun tsc-alias -p tsconfig.app.json",
+    "dev": "bunx --bun concurrently --kill-others \"tsc --build --watch --preserveWatchOutput\" \"tsc-alias -w -p tsconfig.app.json\"",
+    "types": "bunx --bun tsc --noEmit",
+    "lint": "biome lint ./src --write",
+    "format": "biome format ./src --write",
+    "check": "biome check ./src --write"
+  },
+  "dependencies": {
+    "hono": "^4.11.5",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@leap/typescript-config": "workspace:*"
+  }
+}
