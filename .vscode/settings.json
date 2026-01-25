@@ -1,6 +1,6 @@
 {
   "prettier.enable": false,
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports.biome": "explicit",
     "source.fixAll.biome": "explicit"
@@ -22,4 +22,11 @@
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "typescript.preferences.importModuleSpecifier": "non-relative",
+
+  // Additionals config
+  "cSpell.words": [
+    "Onchainkit",
+    "Siwe",
+    "Wagmi"
+  ],
 }

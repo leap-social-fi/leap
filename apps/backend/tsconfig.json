@@ -1,7 +1,6 @@
 {
   "extends": "@leap/typescript-config/api.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": ".",
     "paths": {
       "@/*": ["./src/*"]

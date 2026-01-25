@@ -4,6 +4,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+  TODO
+  Add onchainkit custom theme for sake of consistency
+  more: https://docs.base.org/onchainkit/guides/tailwind
+*/
+
 :root {
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.141 0.005 285.823);
