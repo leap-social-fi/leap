@@ -15,9 +15,11 @@
   "dependencies": {
     "@base-ui/react": "^1.1.0",
     "@coinbase/onchainkit": "^1.1.2",
+    "@farcaster/miniapp-sdk": "^0.2.1",
     "@tabler/icons-react": "^3.36.1",
     "@tanstack/react-query": "^5.90.20",
     "@tanstack/react-router": "^1.157.5",
+    "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "idb-keyval": "^6.2.2",
