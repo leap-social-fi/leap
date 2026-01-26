@@ -10,6 +10,21 @@ const envVarsSchema = z.object({
 
 	SWAGGER_USER: z.string().default(''),
 	SWAGGER_PASSWORD: z.string().default(''),
+
+	REDIS_HOST: z.string().default('localhost'),
+	REDIS_PORT: z.coerce.number().default(6379),
+	REDIS_USERNAME: z.string().default(''),
+	REDIS_PASSWORD: z.string().default(''),
+	REDIS_DB: z.coerce
+		.number()
+		.min(0, { message: 'REDIS_DB must be 0 or greater' })
+		.default(0),
+
+	AUTH_JWT_SECRET: z.string().min(32, {
+		message: 'AUTH_JWT_SECRET must be at least 32 characters long',
+	}),
+	AUTH_JWT_EXPIRES_IN: z.iso.duration().default('P7D'),
+	AUTH_NONCE_EXPIRES_IN: z.iso.duration().default('P2M'),
 })
 
 export type EnvVarsSchemaType = z.infer<typeof envVarsSchema>

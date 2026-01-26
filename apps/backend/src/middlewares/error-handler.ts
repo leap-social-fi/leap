@@ -70,7 +70,7 @@ const errorHandler: ErrorHandler = async (err, c) => {
 		status: error.statusCode,
 		message: error.message,
 		data: error?.data ?? null,
-		other: {
+		others: {
 			...(!IS_PRODUCTION && { stack: err.stack }),
 		},
 	})

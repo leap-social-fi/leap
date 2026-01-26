@@ -1,7 +1,6 @@
 {
   "extends": "@leap/typescript-config/react.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": ".",
     "paths": {
       "@/*": ["./src/*"],

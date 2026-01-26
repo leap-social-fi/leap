@@ -11,11 +11,16 @@ import logger from './libs/logger'
 import { Server } from './server'
 import './utils/zod'
 
+import { initRedis } from '@/libs/redis'
+
 async function main() {
 	logger.info('Parsing environment variables...')
 	initConfig()
 
 	const conf = config()
+
+	logger.info('Initializing redis...')
+	initRedis()
 
 	logger.info('Starting backend server...')
 	const app = new Hono()

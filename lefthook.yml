@@ -2,14 +2,14 @@ pre-commit:
   parallel: true
   jobs:
     - name: lint
-      run: "bun lint"
+      run: "make lint"
       stage_fixed: true
     - name: format
-      run: "bun format"
+      run: "make format"
       stage_fixed: true
     - name: check
-      run: "bun check"
+      run: "make check"
       stage_fixed: true
     - name: types
-      run: "bun types"
+      run: "make types"
       stage_fixed: true
