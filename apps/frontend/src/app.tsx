@@ -16,7 +16,9 @@ function App() {
 		<WagmiProvider>
 			<QueryClientProvider>
 				<OnchainkitProvider>
-					<RouteProvider />
+					<div className="mx-auto max-w-120">
+						<RouteProvider />
+					</div>
 				</OnchainkitProvider>
 			</QueryClientProvider>
 			<Toaster />
