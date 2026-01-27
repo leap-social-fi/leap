@@ -4,6 +4,9 @@
     "../../biome.json"
   ],
   "root": false,
+  "formatter": {
+    "enabled": true
+  },
   "linter": {
     "rules": {
       "a11y": {
@@ -13,8 +16,5 @@
         "useSortedClasses": "error"
       }
     }
-  },
-  "formatter": {
-    "enabled": true
   }
 }

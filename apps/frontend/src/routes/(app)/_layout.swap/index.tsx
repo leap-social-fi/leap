@@ -1,9 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/(app)/_layout/swap/')({
-	component: RouteComponent,
-})
+import SwapPageContainer from '@/containers/swap'
 
-function RouteComponent() {
-	return <div>Hello "/(app)/_layout/swap/"!</div>
-}
+export const Route = createFileRoute('/(app)/_layout/swap/')({
+	component: SwapPageContainer,
+})

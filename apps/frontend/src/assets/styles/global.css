@@ -49,7 +49,7 @@
 .dark {
 	--background: #121212;
 	--foreground: oklch(0.985 0 0);
-	--surface: #1e1e1e;
+	--surface: rgb(29, 41, 61, 0.5);
 	--card: oklch(0.21 0.006 285.885);
 	--card-foreground: oklch(0.985 0 0);
 	--popover: oklch(0.21 0.006 285.885);
