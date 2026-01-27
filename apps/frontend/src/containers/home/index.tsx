@@ -1,13 +1,32 @@
 import { IconSearch } from '@tabler/icons-react'
+import { useNavigate, useRouterState } from '@tanstack/react-router'
 
+import Each from '@/components/base/Each'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import { Card } from './components/Card'
+import { ArticleCard } from './components/ArticleCard'
 
 const HomePageContainer = () => {
+	const router = useRouterState()
+	const navigate = useNavigate()
+	const listTab = [
+		{
+			name: 'Latest',
+			onClick: () => navigate({ to: '/home', search: { feed: 'latest' } }),
+		},
+		{
+			name: 'Trending',
+			onClick: () => navigate({ to: '/home', search: { feed: 'trending' } }),
+		},
+		{
+			name: 'Library',
+			onClick: () => navigate({ to: '/home', search: { feed: 'library' } }),
+		},
+	]
+
 	return (
-		<div className="min-h-screen bg-slate-800/50 text-slate-900 backdrop-blur-xl dark:bg-background dark:text-slate-100">
+		<div className="min-h-screen bg-white text-slate-900 backdrop-blur-xl dark:bg-background dark:text-slate-100">
 			<div className="sticky top-0 z-30 flex items-center justify-between bg-white px-5 py-4 dark:bg-background">
 				<div className="mr-4 flex flex-1 items-center gap-3 rounded-full bg-slate-200/50 px-4 py-2.5 dark:bg-slate-800/50">
 					<IconSearch />
@@ -25,24 +44,32 @@ const HomePageContainer = () => {
 							src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrEoYXSCwJ0vXdVAUQROvZkkQ5KNKoUM12X9pSZHm4nJ1qgUdd3egCiZmIogwE_Ctq0gPM8hvqVidbhW5X5Ro5RMxHM8s7KE7BRRL0ebo1x3nxZ6cGXAVxn3InU4GqGGeN6VO7eP_duIn-p6DkIKK-nB740-f_E2jPFGlw1eZOWOLUWVxcv-oh3LmCtEJJJI88PjCZyA95F90hObBQ7tHb_n1AOlzMi_XHHqvSJw1-1JxZ-zBacmlD3xuw0eqy1lIvinhwJNrbLB92"
 						/>
 					</div>
-					<div className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-green-500 dark:border-background-dark"></div>
+					<div className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-green-500 dark:border-background"></div>
 				</div>
 			</div>
 
 			<div className="sticky top-19 z-10 flex gap-8 border-slate-200 border-b bg-white px-5 dark:border-slate-800 dark:bg-background">
-				<Tabs defaultValue="overview">
+				<Tabs defaultValue={router.location.search.feed || 'latest'}>
 					<TabsList variant="line">
-						<TabsTrigger value="overview">Latest</TabsTrigger>
-						<TabsTrigger value="analytics">Trending</TabsTrigger>
-						<TabsTrigger value="reports">Library</TabsTrigger>
+						<Each
+							of={listTab}
+							render={(item) => (
+								<TabsTrigger
+									value={item.name.toLowerCase()}
+									onClick={item.onClick}
+								>
+									{item.name}
+								</TabsTrigger>
+							)}
+						/>
 					</TabsList>
 				</Tabs>
 			</div>
 
 			<main className="space-y-6 p-4 pb-24">
-				<Card />
-				<Card />
-				<Card />
+				<ArticleCard />
+				<ArticleCard />
+				<ArticleCard />
 			</main>
 		</div>
 	)

@@ -1,6 +1,6 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
-import { BottomBar } from '@/components/BottomBar'
+import { BottomBar } from '@/components/base/BottomBar'
 import { useToggleDarkMode } from '@/hooks/useToggleDarkMode'
 
 export const Route = createFileRoute('/(app)/_layout')({

@@ -19,5 +19,5 @@ export const useToggleDarkMode = () => {
 		}
 	}, [isDarkMode])
 
-	return { handleToggleDarkMode }
+	return { isDarkMode, handleToggleDarkMode }
 }

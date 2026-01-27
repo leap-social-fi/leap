@@ -14,7 +14,7 @@ export const BottomBar = () => {
 	const navigate = useNavigate()
 
 	return (
-		<nav className="fixed right-0 bottom-0 left-0 z-50 mx-auto flex max-w-120 items-end justify-around border border-gray-50 border-t-2 border-b-0 bg-white px-4 pt-3 pb-3 dark:border-slate-800 dark:bg-background dark:bg-surface-dark/85">
+		<nav className="fixed right-0 bottom-0 left-0 z-50 mx-auto flex max-w-120 items-end justify-around border border-gray-50 border-t-2 border-b-0 bg-white px-4 pt-3 pb-3 dark:border-slate-800 dark:bg-background">
 			<div
 				className={cn(
 					'flex flex-1 cursor-pointer flex-col items-center gap-1',

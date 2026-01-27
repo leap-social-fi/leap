@@ -1,10 +1,10 @@
 import { useNavigate } from '@tanstack/react-router'
 
-export const Card = () => {
+export const ArticleCard = () => {
 	const navigate = useNavigate()
 	return (
 		<article
-			className="cursor-pointer rounded-[24px] border border-slate-100 bg-background p-5 shadow-sm dark:border-slate-800 dark:bg-slate-800/50"
+			className="cursor-pointer rounded-[24px] border border-slate-100 bg-background p-5 shadow-sm dark:border-slate-800 dark:bg-surface"
 			onClick={() => navigate({ to: '/articles/1' })}
 		>
 			<div className="mb-4 flex items-center justify-between">
@@ -19,9 +19,6 @@ export const Card = () => {
 					</span>
 					<span className="text-[10px] text-slate-400">• 6 min read</span>
 				</div>
-				<span className="rounded-md bg-emerald-50 px-2 py-1 font-bold text-[10px] text-emerald-600 uppercase tracking-wider dark:bg-emerald-500/10">
-					Trending
-				</span>
 			</div>
 			<div className="relative mb-5 aspect-video overflow-hidden rounded-2xl">
 				<img
