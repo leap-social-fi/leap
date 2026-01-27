@@ -1,3 +1,5 @@
+import { IconWallet } from '@tabler/icons-react'
+
 import { Button } from '@/components/ui/button'
 
 export const Hero = () => {
@@ -28,9 +30,7 @@ export const Hero = () => {
 				</div>
 				<div className="mt-10 flex w-full flex-col items-center gap-3">
 					<Button className="flex w-max items-center justify-center gap-2 rounded-xl bg-primary px-10 py-6 font-bold text-white shadow-primary/30 shadow-xl transition-all hover:bg-blue-600">
-						<span className="material-symbols-outlined text-xl">
-							account_balance_wallet
-						</span>
+						<IconWallet size={40} />
 						Connect Wallet
 					</Button>
 				</div>

@@ -1,13 +1,19 @@
+import { useNavigate } from '@tanstack/react-router'
+
 import { Button } from '@/components/ui/button'
 
 export const TrendingArticles = () => {
+	const navigate = useNavigate()
 	return (
 		<section className="py-16">
 			<div className="mb-8 flex items-center justify-between px-6">
 				<h2 className="font-black text-2xl tracking-tight dark:text-white">
 					Trending Articles
 				</h2>
-				<Button className="flex items-center gap-1 font-bold text-sm text-white">
+				<Button
+					className="flex items-center gap-1 font-bold text-sm text-white"
+					onClick={() => navigate({ to: '/home' })}
+				>
 					See all
 				</Button>
 			</div>
