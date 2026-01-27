@@ -9,6 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as appLayoutRouteImport } from './routes/(app)/_layout'
+import { Route as appLayoutCreateIndexRouteImport } from './routes/(app)/_layout.create/index'
+import { Route as appLayoutHomeIndexRouteImport } from './routes/(app)/_layout.home/index'
+import { Route as appLayoutPortfolioIndexRouteImport } from './routes/(app)/_layout.portfolio/index'
+import { Route as appLayoutSettingsIndexRouteImport } from './routes/(app)/_layout.settings/index'
+import { Route as appLayoutSwapIndexRouteImport } from './routes/(app)/_layout.swap/index'
+import { Route as ArticlesArticleIdRouteImport } from './routes/articles/$articleId'
 import { Route as IndexRouteImport } from './routes/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -16,27 +23,105 @@ const IndexRoute = IndexRouteImport.update({
 	path: '/',
 	getParentRoute: () => rootRouteImport,
 } as any)
+const ArticlesArticleIdRoute = ArticlesArticleIdRouteImport.update({
+	id: '/articles/$articleId',
+	path: '/articles/$articleId',
+	getParentRoute: () => rootRouteImport,
+} as any)
+const appLayoutRoute = appLayoutRouteImport.update({
+	id: '/(app)/_layout',
+	getParentRoute: () => rootRouteImport,
+} as any)
+const appLayoutSwapIndexRoute = appLayoutSwapIndexRouteImport.update({
+	id: '/swap/',
+	path: '/swap/',
+	getParentRoute: () => appLayoutRoute,
+} as any)
+const appLayoutSettingsIndexRoute = appLayoutSettingsIndexRouteImport.update({
+	id: '/settings/',
+	path: '/settings/',
+	getParentRoute: () => appLayoutRoute,
+} as any)
+const appLayoutPortfolioIndexRoute = appLayoutPortfolioIndexRouteImport.update({
+	id: '/portfolio/',
+	path: '/portfolio/',
+	getParentRoute: () => appLayoutRoute,
+} as any)
+const appLayoutHomeIndexRoute = appLayoutHomeIndexRouteImport.update({
+	id: '/home/',
+	path: '/home/',
+	getParentRoute: () => appLayoutRoute,
+} as any)
+const appLayoutCreateIndexRoute = appLayoutCreateIndexRouteImport.update({
+	id: '/create/',
+	path: '/create/',
+	getParentRoute: () => appLayoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
 	'/': typeof IndexRoute
+	'/articles/$articleId': typeof ArticlesArticleIdRoute
+	'/create/': typeof appLayoutCreateIndexRoute
+	'/home/': typeof appLayoutHomeIndexRoute
+	'/portfolio/': typeof appLayoutPortfolioIndexRoute
+	'/settings/': typeof appLayoutSettingsIndexRoute
+	'/swap/': typeof appLayoutSwapIndexRoute
 }
 export interface FileRoutesByTo {
 	'/': typeof IndexRoute
+	'/articles/$articleId': typeof ArticlesArticleIdRoute
+	'/create': typeof appLayoutCreateIndexRoute
+	'/home': typeof appLayoutHomeIndexRoute
+	'/portfolio': typeof appLayoutPortfolioIndexRoute
+	'/settings': typeof appLayoutSettingsIndexRoute
+	'/swap': typeof appLayoutSwapIndexRoute
 }
 export interface FileRoutesById {
 	__root__: typeof rootRouteImport
 	'/': typeof IndexRoute
+	'/(app)/_layout': typeof appLayoutRouteWithChildren
+	'/articles/$articleId': typeof ArticlesArticleIdRoute
+	'/(app)/_layout/create/': typeof appLayoutCreateIndexRoute
+	'/(app)/_layout/home/': typeof appLayoutHomeIndexRoute
+	'/(app)/_layout/portfolio/': typeof appLayoutPortfolioIndexRoute
+	'/(app)/_layout/settings/': typeof appLayoutSettingsIndexRoute
+	'/(app)/_layout/swap/': typeof appLayoutSwapIndexRoute
 }
 export interface FileRouteTypes {
 	fileRoutesByFullPath: FileRoutesByFullPath
-	fullPaths: '/'
+	fullPaths:
+		| '/'
+		| '/articles/$articleId'
+		| '/create/'
+		| '/home/'
+		| '/portfolio/'
+		| '/settings/'
+		| '/swap/'
 	fileRoutesByTo: FileRoutesByTo
-	to: '/'
-	id: '__root__' | '/'
+	to:
+		| '/'
+		| '/articles/$articleId'
+		| '/create'
+		| '/home'
+		| '/portfolio'
+		| '/settings'
+		| '/swap'
+	id:
+		| '__root__'
+		| '/'
+		| '/(app)/_layout'
+		| '/articles/$articleId'
+		| '/(app)/_layout/create/'
+		| '/(app)/_layout/home/'
+		| '/(app)/_layout/portfolio/'
+		| '/(app)/_layout/settings/'
+		| '/(app)/_layout/swap/'
 	fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
 	IndexRoute: typeof IndexRoute
+	appLayoutRoute: typeof appLayoutRouteWithChildren
+	ArticlesArticleIdRoute: typeof ArticlesArticleIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +133,82 @@ declare module '@tanstack/react-router' {
 			preLoaderRoute: typeof IndexRouteImport
 			parentRoute: typeof rootRouteImport
 		}
+		'/articles/$articleId': {
+			id: '/articles/$articleId'
+			path: '/articles/$articleId'
+			fullPath: '/articles/$articleId'
+			preLoaderRoute: typeof ArticlesArticleIdRouteImport
+			parentRoute: typeof rootRouteImport
+		}
+		'/(app)/_layout': {
+			id: '/(app)/_layout'
+			path: ''
+			fullPath: ''
+			preLoaderRoute: typeof appLayoutRouteImport
+			parentRoute: typeof rootRouteImport
+		}
+		'/(app)/_layout/swap/': {
+			id: '/(app)/_layout/swap/'
+			path: '/swap'
+			fullPath: '/swap/'
+			preLoaderRoute: typeof appLayoutSwapIndexRouteImport
+			parentRoute: typeof appLayoutRoute
+		}
+		'/(app)/_layout/settings/': {
+			id: '/(app)/_layout/settings/'
+			path: '/settings'
+			fullPath: '/settings/'
+			preLoaderRoute: typeof appLayoutSettingsIndexRouteImport
+			parentRoute: typeof appLayoutRoute
+		}
+		'/(app)/_layout/portfolio/': {
+			id: '/(app)/_layout/portfolio/'
+			path: '/portfolio'
+			fullPath: '/portfolio/'
+			preLoaderRoute: typeof appLayoutPortfolioIndexRouteImport
+			parentRoute: typeof appLayoutRoute
+		}
+		'/(app)/_layout/home/': {
+			id: '/(app)/_layout/home/'
+			path: '/home'
+			fullPath: '/home/'
+			preLoaderRoute: typeof appLayoutHomeIndexRouteImport
+			parentRoute: typeof appLayoutRoute
+		}
+		'/(app)/_layout/create/': {
+			id: '/(app)/_layout/create/'
+			path: '/create'
+			fullPath: '/create/'
+			preLoaderRoute: typeof appLayoutCreateIndexRouteImport
+			parentRoute: typeof appLayoutRoute
+		}
 	}
 }
 
+interface appLayoutRouteChildren {
+	appLayoutCreateIndexRoute: typeof appLayoutCreateIndexRoute
+	appLayoutHomeIndexRoute: typeof appLayoutHomeIndexRoute
+	appLayoutPortfolioIndexRoute: typeof appLayoutPortfolioIndexRoute
+	appLayoutSettingsIndexRoute: typeof appLayoutSettingsIndexRoute
+	appLayoutSwapIndexRoute: typeof appLayoutSwapIndexRoute
+}
+
+const appLayoutRouteChildren: appLayoutRouteChildren = {
+	appLayoutCreateIndexRoute: appLayoutCreateIndexRoute,
+	appLayoutHomeIndexRoute: appLayoutHomeIndexRoute,
+	appLayoutPortfolioIndexRoute: appLayoutPortfolioIndexRoute,
+	appLayoutSettingsIndexRoute: appLayoutSettingsIndexRoute,
+	appLayoutSwapIndexRoute: appLayoutSwapIndexRoute,
+}
+
+const appLayoutRouteWithChildren = appLayoutRoute._addFileChildren(
+	appLayoutRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
 	IndexRoute: IndexRoute,
+	appLayoutRoute: appLayoutRouteWithChildren,
+	ArticlesArticleIdRoute: ArticlesArticleIdRoute,
 }
 export const routeTree = rootRouteImport
 	._addFileChildren(rootRouteChildren)

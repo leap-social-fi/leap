@@ -1,6 +1,6 @@
 export const HowItWorks = () => {
 	return (
-		<section className="py-16 dark:bg-black">
+		<section className="py-16 dark:bg-background">
 			<div className="px-6">
 				<h4 className="mb-3 text-center font-black text-[10px] text-primary uppercase tracking-[0.3em]">
 					Platform Flow
