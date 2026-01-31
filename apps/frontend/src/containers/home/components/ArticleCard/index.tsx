@@ -1,3 +1,4 @@
+import { IconChartBar } from '@tabler/icons-react'
 import { useNavigate } from '@tanstack/react-router'
 
 export const ArticleCard = () => {
@@ -82,23 +83,21 @@ export const ArticleCard = () => {
 						<span className="material-symbols-rounded text-[20px]">
 							favorite
 						</span>
-						<span className="font-bold text-xs">1.2k</span>
+						<span className="font-bold text-sm">1.2k</span>
 					</div>
 					<div className="flex items-center gap-1.5 text-slate-500 transition-colors hover:text-primary dark:text-slate-400">
 						<span className="material-symbols-rounded text-[20px]">
 							chat_bubble
 						</span>
-						<span className="font-bold text-xs">84</span>
+						<span className="font-bold text-sm">84</span>
 					</div>
-					<div className="flex items-center text-slate-500 dark:text-slate-400">
-						<span className="material-symbols-rounded text-[20px]">share</span>
+					<div className="flex items-center gap-1.5 text-slate-500 transition-colors hover:text-primary dark:text-slate-400">
+						<IconChartBar />
+						<span className="font-bold text-sm">$84</span>
 					</div>
 				</div>
-				<div className="flex items-center gap-2 rounded-full bg-primary px-8 py-3 font-bold text-sm text-white shadow-lg shadow-primary/25 transition-transform active:scale-95">
-					<span className="material-symbols-rounded text-[18px]">
-						swap_horiz
-					</span>
-					Trade
+				<div className="flex items-center text-slate-500 hover:text-primary dark:text-slate-400">
+					<span className="material-symbols-rounded text-[20px]">share</span>
 				</div>
 			</div>
 		</article>
