@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import ConnectWallet from '@/components/base/Connect'
 import { Hero } from '@/containers/landing-page/components/Hero'
 import { HowItWorks } from '@/containers/landing-page/components/HowItWorks'
 import { TrendingArticles } from '@/containers/landing-page/components/TrendingArticles'
@@ -22,9 +22,7 @@ const LandingPageContainer: React.FC = () => {
 						</h2>
 					</div>
 					<div className="flex items-center gap-3">
-						<Button className="rounded-full bg-primary px-5 py-2 font-bold text-white text-xs shadow-lg shadow-primary/20">
-							Connect
-						</Button>
+						<ConnectWallet />
 					</div>
 				</div>
 			</nav>

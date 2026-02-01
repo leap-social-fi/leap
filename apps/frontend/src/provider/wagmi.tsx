@@ -1,7 +1,7 @@
 import type React from 'react'
 
 import { del, get, set } from 'idb-keyval'
-import { baseSepolia } from 'viem/chains'
+import { baseSepolia, mainnet } from 'viem/chains'
 import {
 	WagmiProvider as BaseWagmiProvider,
 	createConfig,
@@ -10,7 +10,7 @@ import {
 } from 'wagmi'
 
 const config = createConfig({
-	chains: [baseSepolia],
+	chains: [baseSepolia, mainnet],
 	storage: createStorage({
 		storage: {
 			async getItem(name) {
@@ -26,6 +26,7 @@ const config = createConfig({
 	}),
 	transports: {
 		[baseSepolia.id]: http(),
+		[mainnet.id]: http(),
 	},
 })
 

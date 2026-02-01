@@ -1,6 +1,7 @@
-import { IconWallet } from '@tabler/icons-react'
+// import { IconWallet } from '@tabler/icons-react'
 
-import { Button } from '@/components/ui/button'
+// import ConnectWallet from '@/components/base/Connect'
+// import { Button } from '@/components/ui/button'
 
 export const Hero = () => {
 	return (
@@ -27,12 +28,6 @@ export const Hero = () => {
 						The decentralized ecosystem where creators and investors thrive
 						together.
 					</p>
-				</div>
-				<div className="mt-10 flex w-full flex-col items-center gap-3">
-					<Button className="flex w-max items-center justify-center gap-2 rounded-xl bg-primary px-10 py-6 font-bold text-white shadow-primary/30 shadow-xl transition-all hover:bg-blue-600">
-						<IconWallet size={40} />
-						Connect Wallet
-					</Button>
 				</div>
 			</div>
 		</section>
