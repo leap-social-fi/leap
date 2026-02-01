@@ -1,4 +1,4 @@
-import type { NonceResponse, VerifyResponse } from '@leap/shared/schema/auth'
+import type { MeResponse, NonceResponse } from '@leap/shared/schema/auth'
 import type { BaseResponse } from '@leap/shared/types/response'
 import type React from 'react'
 
@@ -48,7 +48,7 @@ const Connect: React.FC<React.PropsWithChildren> = ({ children }) => {
 
 			const signature = await signMessageAsync({ message })
 
-			const verify = await axios.post<BaseResponse<VerifyResponse>>(
+			const verify = await axios.post<BaseResponse<MeResponse>>(
 				'/auth/verify',
 				{
 					nonce,

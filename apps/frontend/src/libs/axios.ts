@@ -6,6 +6,7 @@ import { KEY_ACCESS_TOKEN } from '@/constants/base'
 
 const axios = Axios.create({
 	baseURL: import.meta.env.VITE_API_BASE_URL ?? '',
+	withCredentials: true,
 	headers: {
 		Accept: 'application/json',
 		'Content-Type': 'application/json',

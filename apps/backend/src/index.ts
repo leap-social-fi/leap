@@ -11,13 +11,23 @@ import logger from './libs/logger'
 import { Server } from './server'
 import './utils/zod'
 
+import { checkConnection, initPostgres } from '@/libs/postgresql'
 import { initRedis } from '@/libs/redis'
+
+// @ts-expect-error big int to json
+BigInt.prototype.toJSON = function () {
+	return this.toString()
+}
 
 async function main() {
 	logger.info('Parsing environment variables...')
 	initConfig()
 
 	const conf = config()
+
+	logger.info('Initializing postgresql...')
+	initPostgres()
+	checkConnection()
 
 	logger.info('Initializing redis...')
 	initRedis()
@@ -26,7 +36,14 @@ async function main() {
 	const app = new Hono()
 
 	app.use(logging())
-	app.use(cors())
+	app.use(
+		cors({
+			origin: conf.CORS_ORIGIN,
+			allowMethods: conf.CORS_ALLOW_METHODS,
+			allowHeaders: conf.CORS_ALLOW_HEADERS,
+			credentials: true,
+		}),
+	)
 	app.use(compress())
 	app.use(trimTrailingSlash())
 

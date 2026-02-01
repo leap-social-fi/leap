@@ -10,5 +10,5 @@
   "references": [
     { "path": "../../packages/shared/tsconfig.app.json" }
   ],
-  "include": ["src"]
+  "include": ["src", "drizzle.config.ts"]
 }

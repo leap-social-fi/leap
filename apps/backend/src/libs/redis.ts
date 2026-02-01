@@ -1,6 +1,6 @@
 import { RedisClient } from 'bun'
 
-import config from './config'
+import config, { type Config } from './config'
 import logger from './logger'
 
 let redisClient: RedisClient | undefined
@@ -29,6 +29,16 @@ export function redis() {
 	}
 
 	return redisClient
+}
+
+export class RedisStore {
+	protected redis: RedisClient
+	protected conf: Config
+
+	constructor() {
+		this.redis = redis()
+		this.conf = config()
+	}
 }
 
 export default redis
