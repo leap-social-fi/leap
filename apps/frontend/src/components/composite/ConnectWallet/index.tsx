@@ -6,10 +6,9 @@ import { useConnection } from 'wagmi'
 
 import Button from '@/components/base/Button'
 import Dialog from '@/components/base/Dialog'
+import Connection from '@/components/composite/ConnectWallet/Connection'
+import WalleteOptions from '@/components/composite/ConnectWallet/WalletOptions'
 import { cn } from '@/libs/utils'
-
-import Connection from './Connection'
-import WalleteOptions from './WalletOptions'
 
 interface ConnectWalletProps extends PropsWithChildren {
 	className?: string
