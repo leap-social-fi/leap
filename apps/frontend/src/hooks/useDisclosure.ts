@@ -1,7 +1,11 @@
 import { useState } from 'react'
 
-export const useDisclosure = ({ open = false }) => {
-	const [isOpen, setIsOpen] = useState(open)
+interface useDisclosureProps {
+	open?: boolean
+}
+
+export const useDisclosure = (props?: useDisclosureProps) => {
+	const [isOpen, setIsOpen] = useState(props?.open)
 
 	const onOpen = () => setIsOpen(true)
 	const onClose = () => setIsOpen(false)

@@ -1,32 +1,33 @@
 {
-  "prettier.enable": false,
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports.biome": "explicit",
-    "source.fixAll.biome": "explicit"
-  },
+	"prettier.enable": false,
+	"biome.enabled": true,
+	"editor.defaultFormatter": "biomejs.biome",
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports.biome": "explicit",
+		"source.fixAll.biome": "always"
+	},
+	"[javascript][typescript][javascriptreact][typescriptreact][css][tailwindcss][html][json][yaml]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
 
-  // Ignore generated files
-  "files.watcherExclude": {
-    "**/routeTree.gen.ts": true
-  },
-  "search.exclude": {
-    "**/routeTree.gen.ts": true
-  },
-  "files.readonlyInclude": {
-    "**/routeTree.gen.ts": true
-  },
+	// Ignore generated files
+	"files.watcherExclude": {
+		"**/routeTree.gen.ts": true
+	},
+	"search.exclude": {
+		"**/routeTree.gen.ts": true
+	},
+	"files.readonlyInclude": {
+		"**/routeTree.gen.ts": true
+	},
 
-  // Auto import fix settings
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  "javascript.preferences.importModuleSpecifier": "non-relative",
-  "typescript.updateImportsOnFileMove.enabled": "always",
-  "typescript.preferences.importModuleSpecifier": "non-relative",
+	// Auto import fix settings
+	"javascript.updateImportsOnFileMove.enabled": "always",
+	"javascript.preferences.importModuleSpecifier": "non-relative",
+	"typescript.updateImportsOnFileMove.enabled": "always",
+	"typescript.preferences.importModuleSpecifier": "non-relative",
 
-  // Additionals config
-  "cSpell.words": [
-    "Onchainkit",
-    "Siwe",
-    "Wagmi"
-  ],
+	// Additionals config
+	"cSpell.words": ["Onchainkit", "Siwe", "Wagmi"]
 }

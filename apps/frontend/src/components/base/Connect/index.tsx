@@ -1,0 +1,49 @@
+import type React from 'react'
+import type { PropsWithChildren } from 'react'
+
+import { IconWallet } from '@tabler/icons-react'
+import { useConnection } from 'wagmi'
+
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import { cn } from '@/libs/utils'
+
+import Connection from './connection'
+import WalleteOptions from './wallet-options'
+
+interface ConnectWalletProps extends PropsWithChildren {
+	className?: string
+}
+
+const ConnectWallet: React.FC<ConnectWalletProps> = ({
+	className,
+	children,
+}) => {
+	const { isConnected } = useConnection()
+	if (isConnected) return <Connection />
+	return (
+		<Dialog>
+			<DialogTrigger>
+				{children ? (
+					children
+				) : (
+					<Button
+						className={cn(
+							'flex w-max items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 font-bold text-white shadow-primary/30 shadow-xl transition-all hover:bg-blue-600',
+							className,
+						)}
+					>
+						<IconWallet size={40} />
+						Connect Wallet
+					</Button>
+				)}
+			</DialogTrigger>
+
+			<DialogContent showCloseButton={false}>
+				<WalleteOptions />
+			</DialogContent>
+		</Dialog>
+	)
+}
+
+export default ConnectWallet
