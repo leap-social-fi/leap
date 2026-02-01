@@ -4,12 +4,11 @@ import type { PropsWithChildren } from 'react'
 import { IconWallet } from '@tabler/icons-react'
 import { useConnection } from 'wagmi'
 
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import Button from '@/components/base/Button'
+import Dialog from '@/components/base/Dialog'
+import Connection from '@/components/composite/ConnectWallet/Connection'
+import WalleteOptions from '@/components/composite/ConnectWallet/WalletOptions'
 import { cn } from '@/libs/utils'
-
-import Connection from './connection'
-import WalleteOptions from './wallet-options'
 
 interface ConnectWalletProps extends PropsWithChildren {
 	className?: string
@@ -23,7 +22,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({
 	if (isConnected) return <Connection />
 	return (
 		<Dialog>
-			<DialogTrigger>
+			<Dialog.Trigger>
 				{children ? (
 					children
 				) : (
@@ -37,11 +36,11 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({
 						Connect Wallet
 					</Button>
 				)}
-			</DialogTrigger>
+			</Dialog.Trigger>
 
-			<DialogContent showCloseButton={false}>
+			<Dialog.Content showCloseButton={false}>
 				<WalleteOptions />
-			</DialogContent>
+			</Dialog.Content>
 		</Dialog>
 	)
 }

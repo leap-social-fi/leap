@@ -1,13 +1,14 @@
-import './styles.scss'
+import './Tiptap.styles.scss'
 
 import type React from 'react'
+import type { TiptapProps } from '@/components/composite/Tiptap/Tiptap.types'
 
 import { TextStyleKit } from '@tiptap/extension-text-style'
 import { Placeholder } from '@tiptap/extensions'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 
-import MenuBar from '@/components/base/Tiptap/MenuBar'
+import MenuBar from '@/components/composite/Tiptap/MenuBar'
 import { cn } from '@/libs/utils'
 
 const extensions = [
@@ -18,14 +19,10 @@ const extensions = [
 	}),
 ]
 
-interface TiptapProps {
-	className?: string
-}
-
 const Tiptap: React.FC<TiptapProps> = ({ className }) => {
 	const editor = useEditor({
 		extensions,
-		content: ``,
+		content: `<div>Hello</div>`,
 	})
 	return (
 		<div className={cn('flex flex-col gap-5', className)}>

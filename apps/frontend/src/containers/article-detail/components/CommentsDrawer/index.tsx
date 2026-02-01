@@ -2,9 +2,9 @@ import type React from 'react'
 
 import { IconSend2, IconX } from '@tabler/icons-react'
 
-import { Button } from '@/components/ui/button'
-import { Drawer, DrawerContent } from '@/components/ui/drawer'
-import { Input } from '@/components/ui/input'
+import Button from '@/components/base/Button'
+import Drawer from '@/components/base/Drawer'
+import Input from '@/components/base/Input'
 import { CommentItem } from '@/containers/article-detail/components/CommentsDrawer/CommentItem'
 
 interface CommentsDrawerProps {
@@ -15,7 +15,7 @@ interface CommentsDrawerProps {
 const CommentsDrawer: React.FC<CommentsDrawerProps> = ({ isOpen, onClose }) => {
 	return (
 		<Drawer open={isOpen} onOpenChange={onClose}>
-			<DrawerContent className="mx-auto min-h-[95dvh] max-w-120 rounded-t-4xl">
+			<Drawer.Content className="mx-auto min-h-[95dvh] max-w-120 rounded-t-4xl">
 				<div className="flex h-12 items-center justify-between rounded-t-2xl border-slate-100 border-b bg-white/80 px-5 dark:border-slate-800 dark:bg-background">
 					<div className="flex items-center gap-2">
 						<h1 className="font-bold text-lg text-slate-900 dark:text-slate-200">
@@ -67,7 +67,7 @@ const CommentsDrawer: React.FC<CommentsDrawerProps> = ({ isOpen, onClose }) => {
 						</Button>
 					</div>
 				</div>
-			</DrawerContent>
+			</Drawer.Content>
 		</Drawer>
 	)
 }

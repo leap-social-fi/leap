@@ -1,6 +1,6 @@
 import { IconCircleCheck } from '@tabler/icons-react'
 
-import { Button } from '@/components/ui/button'
+import Button from '@/components/base/Button'
 
 const CreatorPortfolio: React.FC = () => {
 	return (

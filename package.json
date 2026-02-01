@@ -38,10 +38,5 @@
   },
   "peerDependencies": {
     "typescript": "^5"
-  },
-  "dependencies": {
-    "@tiptap/extensions": "^3.18.0",
-    "i": "^0.3.7",
-    "npm": "^11.8.0"
   }
 }

@@ -1,7 +1,7 @@
 import { IconChevronDown, IconTransferVertical } from '@tabler/icons-react'
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import Button from '@/components/base/Button'
+import Input from '@/components/base/Input'
 
 const SwapPageContainer = () => {
 	return (

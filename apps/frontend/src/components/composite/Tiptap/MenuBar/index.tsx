@@ -18,7 +18,7 @@ import {
 import { type Editor, useEditorState } from '@tiptap/react'
 import './styles.scss'
 
-import { Button } from '@/components/ui/button'
+import Button from '@/components/base/Button'
 
 const MenuBar = ({ editor }: { editor: Editor }) => {
 	const editorState = useEditorState({

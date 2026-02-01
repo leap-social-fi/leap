@@ -11,7 +11,7 @@ import {
 	useSignMessage,
 } from 'wagmi'
 
-import { Button } from '@/components/ui/button'
+import Button from '@/components/base/Button'
 import axios from '@/libs/axios'
 
 const WalleteOptions = () => {

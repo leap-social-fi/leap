@@ -1,7 +1,7 @@
 import { IconCopy, IconLogout } from '@tabler/icons-react'
 import { useNavigate } from '@tanstack/react-router'
 
-import { Switch } from '@/components/ui/switch'
+import Switch from '@/components/base/Switch'
 import { useToggleDarkMode } from '@/hooks/useToggleDarkMode'
 
 const SettingsPageContainer: React.FC = () => {

@@ -2,8 +2,8 @@ import { IconSearch } from '@tabler/icons-react'
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 
 import Each from '@/components/base/Each'
-import { Input } from '@/components/ui/input'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import Input from '@/components/base/Input'
+import Tabs from '@/components/base/Tabs'
 
 import { ArticleCard } from './components/ArticleCard'
 
@@ -50,19 +50,19 @@ const HomePageContainer = () => {
 
 			<div className="sticky top-19 z-10 flex gap-8 border-slate-200 border-b bg-white px-5 dark:border-slate-800 dark:bg-background">
 				<Tabs defaultValue={router.location.search.feed || 'latest'}>
-					<TabsList variant="line">
+					<Tabs.List variant="line">
 						<Each
 							of={listTab}
 							render={(item) => (
-								<TabsTrigger
+								<Tabs.Trigger
 									value={item.name.toLowerCase()}
 									onClick={item.onClick}
 								>
 									{item.name}
-								</TabsTrigger>
+								</Tabs.Trigger>
 							)}
 						/>
-					</TabsList>
+					</Tabs.List>
 				</Tabs>
 			</div>
 
