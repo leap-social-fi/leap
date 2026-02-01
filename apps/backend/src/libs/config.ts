@@ -5,12 +5,26 @@ import { getErrorPhrase } from '@/utils/zod'
 
 import logger from './logger'
 
-const envVarsSchema = z.object({
+const configSchema = z.object({
 	PORT: z.coerce.number().default(3000),
-
 	SWAGGER_USER: z.string().default(''),
 	SWAGGER_PASSWORD: z.string().default(''),
-
+	CORS_ORIGIN: z
+		.string()
+		.transform((val) => val.split(',').map((item) => item.trim()))
+		.pipe(z.array(z.string()))
+		.default(['*']),
+	CORS_ALLOW_METHODS: z
+		.string()
+		.transform((val) => val.split(',').map((item) => item.trim()))
+		.pipe(z.array(z.enum(['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])))
+		.default(['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']),
+	CORS_ALLOW_HEADERS: z
+		.string()
+		.transform((val) => val.split(',').map((item) => item.trim()))
+		.pipe(z.array(z.string()))
+		.default(['Content-Type']),
+	POSTGRES_DB_URL: z.string(),
 	REDIS_HOST: z.string().default('localhost'),
 	REDIS_PORT: z.coerce.number().default(6379),
 	REDIS_USERNAME: z.string().default(''),
@@ -25,14 +39,15 @@ const envVarsSchema = z.object({
 	}),
 	AUTH_JWT_EXPIRES_IN: z.iso.duration().default('P7D'),
 	AUTH_NONCE_EXPIRES_IN: z.iso.duration().default('P2M'),
+	AUTH_CACHE_EXPIRES_IN: z.iso.duration().default('P5M'),
 })
 
-export type EnvVarsSchemaType = z.infer<typeof envVarsSchema>
+export type Config = z.infer<typeof configSchema>
 
-let valConfig: EnvVarsSchemaType | undefined
+let valConfig: Config | undefined
 
 export function initConfig(skipLogger = false) {
-	const parseConfig = envVarsSchema.safeParse(process.env)
+	const parseConfig = configSchema.safeParse(process.env)
 	if (!parseConfig.success) {
 		if (!skipLogger) {
 			logger.error('Invalid environment variables...')

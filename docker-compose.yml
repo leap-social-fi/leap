@@ -5,8 +5,34 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    networks:
+      - leap
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 3
+
+  postgres:
+    container_name: postgres
+    image: postgres:15.15-alpine
+    restart: always
+    environment:
+      PGTZ: "Asia/Jakarta"
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      - leap
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+networks:
+  leap:
+    driver: bridge
