@@ -1,4 +1,4 @@
-import './styles.scss'
+import './Tiptap.styles.scss'
 
 import type React from 'react'
 import type { TiptapProps } from '@/components/composite/Tiptap/Tiptap.types'
