@@ -1,14 +1,15 @@
+import type React from 'react'
+import type { SwitchProps } from '@/components/base/Switch/Switch.types'
+
 import { Switch as SwitchPrimitive } from '@base-ui/react/switch'
 
 import { cn } from '@/libs/utils'
 
-function Switch({
+const Switch: React.FC<SwitchProps> = ({
 	className,
 	size = 'default',
 	...props
-}: SwitchPrimitive.Root.Props & {
-	size?: 'sm' | 'default'
-}) {
+}) => {
 	return (
 		<SwitchPrimitive.Root
 			data-slot="switch"
@@ -27,4 +28,4 @@ function Switch({
 	)
 }
 
-export { Switch }
+export default Switch

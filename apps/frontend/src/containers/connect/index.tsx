@@ -18,15 +18,15 @@ import {
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 import { createSiweMessage } from 'viem/siwe'
-import { useAccount, useDisconnect, useSignMessage } from 'wagmi'
+import { useConnection, useDisconnect, useSignMessage } from 'wagmi'
 
 import axios from '@/libs/axios'
 
 // TODO: fix me move to better folder
 const Connect: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const { chainId, address } = useAccount()
-	const { disconnect } = useDisconnect()
-	const { signMessageAsync } = useSignMessage()
+	const { chainId, address } = useConnection()
+	const { mutate: disconnect } = useDisconnect()
+	const { mutateAsync: signMessageAsync } = useSignMessage()
 
 	const handleSiwe = useCallback(async () => {
 		if (!address || !chainId) return

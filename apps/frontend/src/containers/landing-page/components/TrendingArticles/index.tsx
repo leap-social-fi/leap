@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
+import Button from '@/components/base/Button'
 
 export const TrendingArticles = () => {
 	const navigate = useNavigate()

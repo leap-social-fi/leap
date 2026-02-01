@@ -1,6 +1,6 @@
-import Tiptap from '@/components/base/Tiptap'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import Button from '@/components/base/Button'
+import Input from '@/components/base/Input'
+import Tiptap from '@/components/composite/Tiptap'
 
 const ArticleCreatePageContainer = () => {
 	return (

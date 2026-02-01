@@ -1,4 +1,4 @@
-import ConnectWallet from '@/components/base/Connect'
+import ConnectWallet from '@/components/composite/ConnectWallet'
 import { Hero } from '@/containers/landing-page/components/Hero'
 import { HowItWorks } from '@/containers/landing-page/components/HowItWorks'
 import { TrendingArticles } from '@/containers/landing-page/components/TrendingArticles'

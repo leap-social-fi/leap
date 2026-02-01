@@ -1,3 +1,5 @@
+import type React from 'react'
+
 import {
 	IconAlertOctagon,
 	IconAlertTriangle,
@@ -7,9 +9,7 @@ import {
 } from '@tabler/icons-react'
 import { Toaster as Sonner, type ToasterProps } from 'sonner'
 
-const Toaster = ({ ...props }: ToasterProps) => {
-	// TODO: change theme to use preverences!
-
+const Toaster: React.FC<ToasterProps> = ({ ...props }) => {
 	return (
 		<Sonner
 			theme="system"
@@ -39,4 +39,4 @@ const Toaster = ({ ...props }: ToasterProps) => {
 	)
 }
 
-export { Toaster }
+export default Toaster

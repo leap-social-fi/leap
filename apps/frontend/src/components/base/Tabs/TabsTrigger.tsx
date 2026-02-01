@@ -1,57 +1,13 @@
+import type React from 'react'
+
 import { Tabs as TabsPrimitive } from '@base-ui/react/tabs'
-import { type VariantProps, cva } from 'class-variance-authority'
 
 import { cn } from '@/libs/utils'
 
-function Tabs({
+const TabsTrigger: React.FC<TabsPrimitive.Tab.Props> = ({
 	className,
-	orientation = 'horizontal',
 	...props
-}: TabsPrimitive.Root.Props) {
-	return (
-		<TabsPrimitive.Root
-			data-slot="tabs"
-			data-orientation={orientation}
-			className={cn(
-				'group/tabs flex gap-2 data-[orientation=horizontal]:flex-col',
-				className,
-			)}
-			{...props}
-		/>
-	)
-}
-
-const tabsListVariants = cva(
-	'rounded-lg p-[3px] group-data-horizontal/tabs:h-8 data-[variant=line]:rounded-none group/tabs-list text-muted-foreground inline-flex w-fit items-center justify-center group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col',
-	{
-		variants: {
-			variant: {
-				default: 'bg-muted',
-				line: 'gap-1 bg-transparent',
-			},
-		},
-		defaultVariants: {
-			variant: 'default',
-		},
-	},
-)
-
-function TabsList({
-	className,
-	variant = 'default',
-	...props
-}: TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>) {
-	return (
-		<TabsPrimitive.List
-			data-slot="tabs-list"
-			data-variant={variant}
-			className={cn(tabsListVariants({ variant }), className)}
-			{...props}
-		/>
-	)
-}
-
-function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
+}) => {
 	return (
 		<TabsPrimitive.Tab
 			data-slot="tabs-trigger"
@@ -67,14 +23,4 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
 	)
 }
 
-function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
-	return (
-		<TabsPrimitive.Panel
-			data-slot="tabs-content"
-			className={cn('flex-1 text-sm outline-none', className)}
-			{...props}
-		/>
-	)
-}
-
-export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }
+export default TabsTrigger

@@ -1,7 +1,7 @@
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 
 import Each from '@/components/base/Each'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import Tabs from '@/components/base/Tabs'
 import CollectorPortfolio from '@/containers/portfolio/collector-portfolio'
 import CreatorPortfolio from '@/containers/portfolio/creator-portfolio'
 
@@ -29,11 +29,11 @@ const PortfolioPageContainer = () => {
 				className="w-full"
 			>
 				<div className="sticky top-0 z-30 flex border-gray-200 border-b bg-white px-4 py-5 dark:border-slate-800/80 dark:bg-background">
-					<TabsList className="flex w-full gap-1 border-slate-100 border-b dark:border-slate-800 dark:bg-surface">
+					<Tabs.List className="flex w-full gap-1 border-slate-100 border-b dark:border-slate-800 dark:bg-surface">
 						<Each
 							of={listTabs}
 							render={(item, index) => (
-								<TabsTrigger
+								<Tabs.Trigger
 									value={item.value}
 									className={
 										item.value === (router.location.search.tab || 'creator')
@@ -44,17 +44,17 @@ const PortfolioPageContainer = () => {
 									onClick={item.onClick}
 								>
 									{item.label}
-								</TabsTrigger>
+								</Tabs.Trigger>
 							)}
 						/>
-					</TabsList>
+					</Tabs.List>
 				</div>
-				<TabsContent value="creator">
+				<Tabs.Content value="creator">
 					<CreatorPortfolio />
-				</TabsContent>
-				<TabsContent value="collector">
+				</Tabs.Content>
+				<Tabs.Content value="collector">
 					<CollectorPortfolio />
-				</TabsContent>
+				</Tabs.Content>
 			</Tabs>
 		</div>
 	)
