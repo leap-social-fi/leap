@@ -20,7 +20,7 @@ import { toast } from 'sonner'
 import { createSiweMessage } from 'viem/siwe'
 import { useConnection, useDisconnect, useSignMessage } from 'wagmi'
 
-import axios from '@/libs/axios'
+import axios from '@/libs/httpService'
 
 // TODO: fix me move to better folder
 const Connect: React.FC<React.PropsWithChildren> = ({ children }) => {

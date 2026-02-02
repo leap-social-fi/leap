@@ -1,6 +1,3 @@
-import type { MeResponse, NonceResponse } from '@leap/shared/schema/auth'
-import type { BaseResponse } from '@leap/shared/types/response'
-
 import { useCallback } from 'react'
 import { createSiweMessage } from 'viem/siwe'
 import {
@@ -8,16 +5,21 @@ import {
 	type CreateConnectorFn,
 	useConnect,
 	useConnectors,
+	useDisconnect,
 	useSignMessage,
 } from 'wagmi'
 
 import Button from '@/components/base/Button'
-import axios from '@/libs/axios'
+import { useAuthVerify } from '@/modules/auth/hooks/mutations'
+import { useAuthNonce } from '@/modules/auth/hooks/queries'
 
 const WalleteOptions = () => {
-	const { mutateAsync } = useConnect()
 	const connectors = useConnectors()
+	const { mutateAsync } = useConnect()
+	const { refetch: refetchNonce } = useAuthNonce()
 	const { mutateAsync: signMessageAsync } = useSignMessage()
+	const { mutate: verify } = useAuthVerify()
+	const { mutate: disconnect } = useDisconnect()
 
 	const handleConnect = useCallback(
 		async (connector: Connector<CreateConnectorFn>) => {
@@ -25,29 +27,33 @@ const WalleteOptions = () => {
 				const { accounts, chainId } = await mutateAsync({ connector })
 				if (!chainId || accounts.length === 0) return
 
-				const res = await axios.get<BaseResponse<NonceResponse>>('/auth/nonce')
-				const nonce = res.data?.data?.token
-				if (!nonce) throw new Error('Failed to get nonce')
+				const { data: dataNonce } = await refetchNonce()
+				if (!dataNonce?.data.token) throw new Error('Failed to get nonce')
 
 				const message = createSiweMessage({
 					address: accounts[0],
 					chainId: chainId,
 					domain: window.location.host,
-					nonce,
+					nonce: dataNonce?.data.token,
 					uri: window.location.origin,
 					version: '1',
 					statement: 'Sign in to leap',
 				})
 
-				const signature = await signMessageAsync({ message })
+				const signature = await signMessageAsync(
+					{ message },
+					{
+						onError: () => disconnect(),
+					},
+				)
 
-				await axios.post<BaseResponse<MeResponse>>('/auth/verify', {
-					nonce,
+				await verify({
+					nonce: dataNonce.data.token,
 					message,
 					signature,
 				})
 			} catch {
-				console.log('ERROR')
+				disconnect()
 			}
 		},
 		[],
