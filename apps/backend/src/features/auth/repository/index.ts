@@ -4,7 +4,7 @@ import { eq, sql } from 'drizzle-orm'
 
 import BlacklistStore from '@/features/auth/repository/blacklist'
 import NonceStore from '@/features/auth/repository/nonce'
-import UserStore from '@/features/auth/repository/user'
+import UserStore from '@/features/user/repository/user'
 import { type DBClient, postgres } from '@/libs/postgresql'
 import { users } from '@/schema'
 import { id } from '@/utils/app'
