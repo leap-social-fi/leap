@@ -7,7 +7,7 @@ import { useConnection } from 'wagmi'
 import Button from '@/components/base/Button'
 import Dialog from '@/components/base/Dialog'
 import Connection from '@/components/composite/ConnectWallet/Connection'
-import WalleteOptions from '@/components/composite/ConnectWallet/WalletOptions'
+import WalletOptions from '@/components/composite/ConnectWallet/WalletOptions'
 import { cn } from '@/libs/utils'
 
 interface ConnectWalletProps extends PropsWithChildren {
@@ -39,7 +39,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({
 			</Dialog.Trigger>
 
 			<Dialog.Content showCloseButton={false}>
-				<WalleteOptions />
+				<WalletOptions />
 			</Dialog.Content>
 		</Dialog>
 	)

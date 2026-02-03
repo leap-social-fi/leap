@@ -2,6 +2,7 @@ import type { AuthJwtPayload } from '@leap/shared/types/auth'
 import type { DiceBearAvatar } from '@leap/shared/types/user'
 import type {
 	AuthCache,
+	CheckUsernameProps,
 	LogoutProps,
 	MeProps,
 	NewUserProps,
@@ -42,6 +43,18 @@ class AuthController {
 			message: 'Successfully generated nonce!',
 			data: {
 				token,
+			},
+		})
+	}
+
+	public async checkUsername({ c, username }: CheckUsernameProps) {
+		const available = await this.repo.checkUsername(username)
+		const message = `Username is ${available ? 'available' : 'not available'}`
+		return response({
+			c,
+			message,
+			data: {
+				available,
 			},
 		})
 	}

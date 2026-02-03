@@ -61,6 +61,18 @@ export class AuthRepository {
 		return user
 	}
 
+	public async checkUsername(username: string) {
+		const result = await this.db
+			.select({
+				count: sql<number>`cast(count(${users.id}) as int)`,
+			})
+			.from(users)
+			.where(eq(users.username, username))
+			.then(takeUniqueOrThrow)
+
+		return result?.count === 0
+	}
+
 	public async updateLastLoggedIn(id: bigint) {
 		return await this.db
 			.update(users)

@@ -1,4 +1,6 @@
 import {
+	checkUsernameRequestSchema,
+	checkUsernameResponseSchema,
 	meResponseSchema,
 	newUserRequestSchema,
 	nonceResponseSchema,
@@ -34,6 +36,30 @@ app.get(
 	(c) => {
 		c.header('Cache-Control', 'no-store')
 		return controller.nonce({ c })
+	},
+)
+
+app.get(
+	'/username',
+	describeRoute({
+		tags: ['Auth'],
+		description: 'Check if username is available',
+		responses: {
+			200: {
+				description: 'Username availability',
+				content: {
+					'application/json': {
+						schema: resolver(baseResponse(checkUsernameResponseSchema)),
+					},
+				},
+			},
+		},
+	}),
+	validator('query', checkUsernameRequestSchema),
+	auth('identity'),
+	(c) => {
+		const query = c.req.valid('query')
+		return controller.checkUsername({ c, ...query })
 	},
 )
 

@@ -13,7 +13,7 @@ import Button from '@/components/base/Button'
 import { useAuthVerify } from '@/modules/auth/hooks/mutations'
 import { useAuthNonce } from '@/modules/auth/hooks/queries'
 
-const WalleteOptions = () => {
+const WalletOptions = () => {
 	const connectors = useConnectors()
 	const { mutateAsync } = useConnect()
 	const { refetch: refetchNonce } = useAuthNonce()
@@ -56,7 +56,7 @@ const WalleteOptions = () => {
 				disconnect()
 			}
 		},
-		[],
+		[disconnect, mutateAsync, refetchNonce, signMessageAsync, verify],
 	)
 
 	return (
@@ -75,4 +75,4 @@ const WalleteOptions = () => {
 	)
 }
 
-export default WalleteOptions
+export default WalletOptions
