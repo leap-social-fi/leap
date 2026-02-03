@@ -56,7 +56,7 @@ const WalleteOptions = () => {
 				disconnect()
 			}
 		},
-		[],
+		[disconnect, mutateAsync, refetchNonce, signMessageAsync, verify],
 	)
 
 	return (

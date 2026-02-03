@@ -17,7 +17,7 @@ function App() {
 	return (
 		<WagmiProvider>
 			<QueryClientProvider>
-				<div className="relative mx-auto max-w-120 border-slate-200 dark:border-slate-800">
+				<div className="relative mx-auto border-slate-200 dark:border-slate-800">
 					<RouteProvider />
 				</div>
 			</QueryClientProvider>
