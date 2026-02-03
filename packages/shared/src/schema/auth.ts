@@ -33,3 +33,15 @@ export const nonceResponseSchema = z.object({
 })
 
 export type NonceResponse = z.infer<typeof nonceResponseSchema>
+
+export const checkUsernameRequestSchema = z.object({
+	username,
+})
+
+export type CheckUsernameRequest = z.infer<typeof checkUsernameRequestSchema>
+
+export const checkUsernameResponseSchema = z.object({
+	available: z.boolean(),
+})
+
+export type CheckUsernameResponse = z.infer<typeof checkUsernameResponseSchema>

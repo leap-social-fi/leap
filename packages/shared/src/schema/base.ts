@@ -134,3 +134,7 @@ export const slug = z
 	.meta({
 		example: 'slug-example',
 	})
+
+export const bio = z.string().nullable().meta({
+	example: 'Hello, I am a rizal',
+})

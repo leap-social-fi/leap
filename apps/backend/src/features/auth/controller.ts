@@ -1,7 +1,7 @@
 import type { AuthJwtPayload } from '@leap/shared/types/auth'
-import type { DiceBearAvatar } from '@leap/shared/types/user'
 import type {
 	AuthCache,
+	CheckUsernameProps,
 	LogoutProps,
 	MeProps,
 	NewUserProps,
@@ -9,8 +9,6 @@ import type {
 	VerifyProps,
 } from '@/features/auth/types'
 
-import { DICE_BEAR_PREFIX } from '@leap/shared/constants/user'
-import { diceBearUrl } from '@leap/shared/utils/url'
 import { add, getUnixTime } from 'date-fns'
 import { deleteCookie, setCookie } from 'hono/cookie'
 import { sign } from 'hono/jwt'
@@ -23,6 +21,7 @@ import { AuthRepository } from '@/features/auth/repository'
 import config, { type Config } from '@/libs/config'
 import logger from '@/libs/logger'
 import { response } from '@/utils/response'
+import { getAvatar } from '@/utils/user'
 
 class AuthController {
 	private repo: AuthRepository
@@ -42,6 +41,18 @@ class AuthController {
 			message: 'Successfully generated nonce!',
 			data: {
 				token,
+			},
+		})
+	}
+
+	public async checkUsername({ c, username }: CheckUsernameProps) {
+		const available = await this.repo.checkUsername(username)
+		const message = `${username} is ${available ? 'available' : 'not available'}`
+		return response({
+			c,
+			message,
+			data: {
+				available,
 			},
 		})
 	}
@@ -191,18 +202,8 @@ class AuthController {
 
 		return {
 			...user,
-			avatar: this.getAvatar(user.avatar, user.username),
+			avatar: getAvatar(user.avatar, user.username),
 		}
-	}
-
-	protected getAvatar(avatar: string, username = 'username'): string {
-		const isDiceBear = avatar.startsWith(DICE_BEAR_PREFIX)
-		if (isDiceBear) {
-			const style = avatar.substring(DICE_BEAR_PREFIX.length) as DiceBearAvatar
-			return diceBearUrl(style, username)
-		}
-
-		return avatar
 	}
 }
 

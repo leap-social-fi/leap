@@ -4,7 +4,7 @@ import { eq, sql } from 'drizzle-orm'
 
 import BlacklistStore from '@/features/auth/repository/blacklist'
 import NonceStore from '@/features/auth/repository/nonce'
-import UserStore from '@/features/auth/repository/user'
+import UserStore from '@/features/user/repository/user'
 import { type DBClient, postgres } from '@/libs/postgresql'
 import { users } from '@/schema'
 import { id } from '@/utils/app'
@@ -59,6 +59,18 @@ export class AuthRepository {
 
 		await this.user.set(user)
 		return user
+	}
+
+	public async checkUsername(username: string) {
+		const result = await this.db
+			.select({
+				count: sql<number>`cast(count(${users.id}) as int)`,
+			})
+			.from(users)
+			.where(eq(users.username, username))
+			.then(takeUniqueOrThrow)
+
+		return result?.count === 0
 	}
 
 	public async updateLastLoggedIn(id: bigint) {

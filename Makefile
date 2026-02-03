@@ -64,6 +64,13 @@ test:
 test/contract:
 	forge test --root apps/contract
 
+## fix: Run lint, format, and check
+.PHONY: fix
+fix:
+	$(MAKE) -s lint
+	$(MAKE) -s format
+	$(MAKE) -s check
+
 ## lint: Run linters
 .PHONY: lint lint/contract
 .SILENT:

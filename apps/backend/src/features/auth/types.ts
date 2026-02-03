@@ -1,4 +1,8 @@
-import type { NewUserRequest, VerifyRequest } from '@leap/shared/schema/auth'
+import type {
+	CheckUsernameRequest,
+	NewUserRequest,
+	VerifyRequest,
+} from '@leap/shared/schema/auth'
 import type { AuthProps } from '@/middlewares/auth'
 import type { users } from '@/schema'
 import type { IController } from '@/types/controller'
@@ -24,3 +28,5 @@ export type AuthCache = Pick<
 export type CreateUserProps = NewUserRequest & {
 	address: string
 }
+
+export type CheckUsernameProps = IController & CheckUsernameRequest

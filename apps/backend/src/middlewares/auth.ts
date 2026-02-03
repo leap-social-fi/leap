@@ -79,6 +79,8 @@ function auth(mode: AuthMode = 'auth'): MiddlewareHandler<AuthMiddleware> {
 
 			throw new ApiError(status.UNAUTHORIZED, (err as Error).message)
 		}
+
+		await next()
 	})
 }
 
