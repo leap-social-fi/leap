@@ -88,8 +88,10 @@ class AuthController {
 			const { token, maxAge } = await this.setAccessToken(address, user?.id)
 			setCookie(c, KEY_ACCESS_TOKEN, token, {
 				httpOnly: true,
-				secure: true,
-				sameSite: 'Strict',
+				// secure: true,
+				// sameSite: 'Strict',
+				secure: false,
+				sameSite: 'lax',
 				path: '/',
 				maxAge,
 			})
@@ -112,6 +114,7 @@ class AuthController {
 	protected async setAccessToken(address: string, userId?: bigint) {
 		const now = new Date()
 		const duration = parse(this.conf.AUTH_JWT_EXPIRES_IN)
+		const seconds = Number(duration.days) * 24 * 60 * 60
 		const expDate = add(now, duration)
 
 		const payload: AuthJwtPayload = {
@@ -125,7 +128,7 @@ class AuthController {
 		const token = await sign(payload, this.conf.AUTH_JWT_SECRET)
 		return {
 			token,
-			maxAge: duration.seconds || 0,
+			maxAge: seconds || 0,
 		}
 	}
 
@@ -156,8 +159,10 @@ class AuthController {
 			)
 			setCookie(c, KEY_ACCESS_TOKEN, token, {
 				httpOnly: true,
-				secure: true,
-				sameSite: 'Strict',
+				// secure: true,
+				// sameSite: 'Strict',
+				secure: false,
+				sameSite: 'lax',
 				path: '/',
 				maxAge,
 			})

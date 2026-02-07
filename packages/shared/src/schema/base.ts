@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import { IMAGE_EXTENSIONS } from '../constants/base'
 import { DICE_BEAR_AVATAR, DICE_BEAR_PREFIX } from '../constants/user'
+import { TiptapNode } from './tiptap'
 
 export const snowflakeId = z
 	.union([z.string(), z.number()], {
@@ -135,6 +136,17 @@ export const slug = z
 		example: 'slug-example',
 	})
 
-export const bio = z.string().nullable().meta({
+export const bio = z
+	.looseObject({
+		type: z.literal('doc'),
+		content: z.array(TiptapNode),
+	})
+	.optional()
+	.nullable()
+	.meta({
+		example: 'Hello, I am a rizal',
+	})
+
+export const content = z.string().nullable().meta({
 	example: 'Hello, I am a rizal',
 })

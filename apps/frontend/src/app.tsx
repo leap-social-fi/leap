@@ -2,6 +2,7 @@ import { sdk } from '@farcaster/miniapp-sdk'
 import { useEffect } from 'react'
 
 import Toaster from '@/components/base/Toaster'
+import { AuthProvider } from '@/contexts/auth/Auth.context'
 import { useToggleDarkMode } from '@/hooks/useToggleDarkMode'
 import QueryClientProvider from '@/provider/query-client'
 import RouteProvider from '@/provider/router'
@@ -17,9 +18,11 @@ function App() {
 	return (
 		<WagmiProvider>
 			<QueryClientProvider>
-				<div className="relative mx-auto max-w-120 border-slate-200 dark:border-slate-800">
-					<RouteProvider />
-				</div>
+				<AuthProvider>
+					<div className="relative mx-auto border-slate-200 dark:border-slate-800">
+						<RouteProvider />
+					</div>
+				</AuthProvider>
 			</QueryClientProvider>
 			<Toaster />
 		</WagmiProvider>

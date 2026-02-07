@@ -5,7 +5,7 @@ interface useDisclosureProps {
 }
 
 export const useDisclosure = (props?: useDisclosureProps) => {
-	const [isOpen, setIsOpen] = useState(props?.open)
+	const [isOpen, setIsOpen] = useState(props?.open ?? false)
 
 	const onOpen = () => setIsOpen(true)
 	const onClose = () => setIsOpen(false)
