@@ -4,6 +4,7 @@ import { useConnection, useDisconnect } from 'wagmi'
 
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { useDisclosure } from '@/hooks/useDisclosure'
+import { useLogout } from '@/modules/auth/hooks/mutations'
 
 const Connection = () => {
 	const { address, isConnected } = useConnection()
@@ -11,8 +12,15 @@ const Connection = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const handleClose = useCallback(() => onClose(), [onClose])
 	const optionsRef = useClickOutside(() => handleClose())
+	const { mutate: logout } = useLogout({
+		onSuccess: () => disconnect(),
+	})
 
 	const isLogin = isConnected && address
+
+	const handleLogout = () => {
+		logout()
+	}
 
 	return (
 		<div ref={optionsRef} className="relative">
@@ -28,7 +36,7 @@ const Connection = () => {
 			{isOpen && (
 				<div
 					className="absolute top-11 flex w-full cursor-pointer items-center gap-2 rounded-lg border bg-white px-3 py-1.5 hover:bg-slate-50 dark:bg-[#121c2f] dark:hover:bg-[#0d1421]"
-					onClick={() => disconnect()}
+					onClick={handleLogout}
 				>
 					<IconLogout size={18} />
 					<div className="text-sm">Logout</div>

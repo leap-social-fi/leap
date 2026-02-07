@@ -5,7 +5,7 @@ import { address, avatar, bio, name, snowflakeId, username } from './base'
 export const updateUserRequestSchema = z.object({
 	name,
 	username,
-	bio,
+	// bio,
 	avatar,
 })
 

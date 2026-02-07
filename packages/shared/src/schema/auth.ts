@@ -1,6 +1,15 @@
 import z from 'zod'
 
-import { address, avatar, image, name, snowflakeId, username } from './base'
+import {
+	address,
+	avatar,
+	bio,
+	// content,
+	image,
+	name,
+	snowflakeId,
+	username,
+} from './base'
 
 export const meResponseSchema = z.object({
 	id: snowflakeId,
@@ -20,13 +29,26 @@ export const verifyRequestSchema = z.object({
 
 export type VerifyRequest = z.infer<typeof verifyRequestSchema>
 
-export const newUserRequestSchema = z.object({
+export const newUserSchemaBase = {
 	name,
 	username,
 	avatar,
+}
+
+// Note: For Frontend
+export const newUserSchemaForm = z.object({
+	...newUserSchemaBase,
+	bio,
 })
 
-export type NewUserRequest = z.infer<typeof newUserRequestSchema>
+// Note: For Backend
+export const newUserSchema = z.object({
+	...newUserSchemaBase,
+	// bio: content
+})
+
+export type NewUserForm = z.infer<typeof newUserSchemaForm>
+export type NewUserRequest = z.infer<typeof newUserSchema>
 
 export const nonceResponseSchema = z.object({
 	token: z.string(),
