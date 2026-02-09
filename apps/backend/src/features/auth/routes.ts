@@ -2,7 +2,7 @@ import {
 	checkUsernameRequestSchema,
 	checkUsernameResponseSchema,
 	meResponseSchema,
-	newUserRequestSchema,
+	newUserSchema,
 	nonceResponseSchema,
 	verifyRequestSchema,
 } from '@leap/shared/schema/auth'
@@ -128,7 +128,7 @@ app.post(
 		},
 	}),
 	auth('identity'),
-	validator('json', newUserRequestSchema),
+	validator('json', newUserSchema),
 	async (c) => {
 		const val = c.req.valid('json')
 		const user = c.get('user')

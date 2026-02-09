@@ -3,8 +3,8 @@ import './Tiptap.styles.scss'
 import type React from 'react'
 import type { TiptapProps } from '@/components/composite/Tiptap/Tiptap.types'
 
+import Placeholder from '@tiptap/extension-placeholder'
 import { TextStyleKit } from '@tiptap/extension-text-style'
-import { Placeholder } from '@tiptap/extensions'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 
