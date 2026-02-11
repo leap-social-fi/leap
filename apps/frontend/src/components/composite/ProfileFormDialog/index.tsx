@@ -4,6 +4,7 @@ import type React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { newUserSchemaForm } from '@leap/shared/schema/auth'
 import { IconCopy } from '@tabler/icons-react'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -30,6 +31,7 @@ const ProfileFormDialog: React.FC<ProfileFormDialogProps> = ({
 	onClose,
 }) => {
 	const { address } = useConnection()
+	const queryClient = useQueryClient()
 	const {
 		register,
 		handleSubmit,
@@ -61,7 +63,17 @@ const ProfileFormDialog: React.FC<ProfileFormDialogProps> = ({
 	}
 
 	const handleSaveNewUser = handleSubmit(({ bio, ...data }) => {
-		mutate({ ...data, bio: bio ? JSON.stringify(bio) : null })
+		mutate(
+			{ ...data, bio: bio ? JSON.stringify(bio) : null },
+			{
+				onSuccess: () => {
+					queryClient.invalidateQueries({
+						queryKey: ['me'],
+					})
+					onClose()
+				},
+			},
+		)
 		onClose()
 	})
 
@@ -77,7 +89,7 @@ const ProfileFormDialog: React.FC<ProfileFormDialogProps> = ({
 						</Avatar>
 
 						<div className="flex items-center gap-1.5">
-							<div className="text-slate-700 dark:text-slate-200">
+							<div className="text-typography-secondary">
 								{truncate({
 									value: address as string,
 									type: 'middle',
@@ -87,7 +99,7 @@ const ProfileFormDialog: React.FC<ProfileFormDialogProps> = ({
 							</div>
 							<IconCopy
 								size={14}
-								className="cursor-pointer"
+								className="cursor-pointer text-typography-secondary"
 								onClick={handleCopy}
 							/>
 						</div>
@@ -121,7 +133,9 @@ const ProfileFormDialog: React.FC<ProfileFormDialogProps> = ({
 					<Button disabled={isPending} size="lg" onClick={handleSaveNewUser}>
 						<div className="flex items-center gap-1">
 							<Spinner isShow={isPending} className="text-white" />
-							<span>{isPending ? 'Loading...' : 'Save'}</span>
+							<span className="text-white">
+								{isPending ? 'Loading...' : 'Save'}
+							</span>
 						</div>
 					</Button>
 				</form>

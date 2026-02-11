@@ -17,9 +17,9 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
 				'z-90 flex w-full flex-col items-center justify-center gap-1',
 				variant === 'screen' ? 'fixed inset-0 h-full min-h-screen' : 'flex-1',
 				{
-					'bg-black/70 supports-backdrop-filter:backdrop-blur-sm':
+					'bg-background/70 supports-backdrop-filter:backdrop-blur-sm':
 						type === 'blur',
-					'bg-black/60': type === 'overlay',
+					'bg-background/60': type === 'overlay',
 					'bg-background': type === 'background',
 				},
 			)}

@@ -7,7 +7,9 @@ import Button from '@/components/base/Button'
 import Conditional from '@/components/base/Conditional'
 import AuthStepDialog from '@/components/composite/ConnectWallet/AuthStepDialog'
 import Connection from '@/components/composite/ConnectWallet/Connection'
+import VerifyOwnershipDialog from '@/components/composite/ConnectWallet/VerifyOwnershipDialog'
 import WalletOptionsDialog from '@/components/composite/ConnectWallet/WalletOptionsDialog'
+import ProfileFormDialog from '@/components/composite/ProfileFormDialog'
 import { cn } from '@/libs/utils'
 import { useConnectWallet } from '@/modules/auth/hooks/useConnectWallet'
 
@@ -23,9 +25,13 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({
 		isConnected,
 		walletOptionsDialog,
 		authStepDialog,
+		profileFormDialog,
+		verifyOwnershipDialog,
 		verifySignStatus,
 		connectWalletStatus,
 		handleConnector,
+		handleSignMessageVerify,
+		handleVerifyOwnershipClose,
 	} = useConnectWallet()
 
 	return (
@@ -44,6 +50,19 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({
 				onClose={walletOptionsDialog.onClose}
 			/>
 
+			{/* Profile Form Dialog */}
+			<ProfileFormDialog
+				isOpen={profileFormDialog.isOpen}
+				onClose={profileFormDialog.onClose}
+			/>
+
+			{/* Verify Ownership Dialog */}
+			<VerifyOwnershipDialog
+				isOpen={verifyOwnershipDialog.isOpen}
+				onClose={handleVerifyOwnershipClose}
+				onVerify={handleSignMessageVerify}
+			/>
+
 			<Conditional if={isConnected}>
 				<Connection />
 			</Conditional>
@@ -54,7 +73,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({
 				) : (
 					<Button
 						className={cn(
-							'flex w-max items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 font-bold text-white shadow-primary/30 shadow-xl transition-all hover:bg-blue-600',
+							'flex w-max items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 font-bold text-typography-light shadow-primary/30 shadow-xl transition-all hover:bg-accent',
 							className,
 						)}
 						onClick={walletOptionsDialog.onOpen}

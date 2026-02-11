@@ -19,6 +19,7 @@ export type StatusAuthType = 'disconnect' | 'loading' | 'connect'
 export interface AuthContextType extends MeResponse {
 	verifySignStatus: StatusAuthType
 	connectWalletStatus: StatusAuthType
+	resetAuth: () => void
 	setAuth: Dispatch<SetStateAction<MeResponse>>
 	setVerifySignStatus: Dispatch<SetStateAction<StatusAuthType>>
 	setConnectWalletStatus: Dispatch<SetStateAction<StatusAuthType>>
@@ -45,6 +46,16 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 		retry: false,
 	})
 
+	const resetAuth = () => {
+		setAuth({
+			id: 0n,
+			address: '',
+			name: '',
+			username: '',
+			avatar: '',
+		})
+	}
+
 	const authContextValue = useMemo(
 		() => ({
 			...auth,
@@ -53,6 +64,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 			setConnectWalletStatus,
 			setVerifySignStatus,
 			setAuth,
+			resetAuth,
 		}),
 		[auth, connectWalletStatus, verifySignStatus],
 	)

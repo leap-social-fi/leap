@@ -2,6 +2,7 @@ import { IconLogout } from '@tabler/icons-react'
 import { useCallback } from 'react'
 import { useConnection, useDisconnect } from 'wagmi'
 
+import { useAuthContext } from '@/contexts/auth/Auth.context'
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { useDisclosure } from '@/hooks/useDisclosure'
 import { useLogout } from '@/modules/auth/hooks/mutations'
@@ -12,8 +13,12 @@ const Connection = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const handleClose = useCallback(() => onClose(), [onClose])
 	const optionsRef = useClickOutside(() => handleClose())
+	const { resetAuth } = useAuthContext()
 	const { mutate: logout } = useLogout({
-		onSuccess: () => disconnect(),
+		onSuccess: () => {
+			disconnect()
+			resetAuth()
+		},
 	})
 
 	const isLogin = isConnected && address
@@ -26,7 +31,7 @@ const Connection = () => {
 		<div ref={optionsRef} className="relative">
 			{isLogin && (
 				<div
-					className="max-w-36 cursor-pointer truncate rounded-2xl bg-primary/10 px-4 py-1.5"
+					className="max-w-36 cursor-pointer truncate rounded-2xl bg-secondary px-4 py-1.5"
 					onClick={onOpen}
 				>
 					{address}
@@ -35,7 +40,7 @@ const Connection = () => {
 
 			{isOpen && (
 				<div
-					className="absolute top-11 flex w-full cursor-pointer items-center gap-2 rounded-lg border bg-white px-3 py-1.5 hover:bg-slate-50 dark:bg-[#121c2f] dark:hover:bg-[#0d1421]"
+					className="absolute top-11 z-10 flex w-full cursor-pointer items-center gap-2 rounded-lg border border-border bg-foreground px-3 py-1.5"
 					onClick={handleLogout}
 				>
 					<IconLogout size={18} />

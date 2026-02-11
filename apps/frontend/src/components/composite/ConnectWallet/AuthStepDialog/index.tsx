@@ -21,7 +21,7 @@ const AuthStepDialog: React.FC<AuthStepDialogProps> = ({
 					<span className="font-semibold text-lg">Connect to Leap</span>
 				</div>
 				<div className="flex flex-col gap-5">
-					<span className="dark:text-white">
+					<span className="text-typography">
 						You will receive two wallet pop-ups. Check your wallet app or
 						browser extensions if nothing pops up.
 					</span>

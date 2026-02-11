@@ -89,15 +89,11 @@ const SimpleEditorLite: React.FC<SimpleEditorLiteProps> = ({
 
 	return (
 		<div className="flex flex-col gap-2">
-			{label && (
-				<div className="font-medium text-slate-700 dark:text-slate-200">
-					{label}
-				</div>
-			)}
+			{label && <div className="font-medium text-typography">{label}</div>}
 
-			<div className="rounded-lg border border-gray-300">
+			<div className="rounded-lg border border-border">
 				{/* MenuBar */}
-				<div className="flex w-full border-gray-200 border-b">
+				<div className="flex w-full border-border border-b">
 					<Button
 						disabled={!editorState.canBold}
 						className={editorState.isBold ? 'menu is-active' : 'menu'}
@@ -130,7 +126,7 @@ const SimpleEditorLite: React.FC<SimpleEditorLiteProps> = ({
 
 				{/* Character Count */}
 				<div className="flex items-center justify-end px-2.5 py-2">
-					<div className="text-slate-700 dark:text-slate-200">
+					<div className="text-typography-secondary">
 						{editorState.charactersCount} / {maxCharacter}
 					</div>
 				</div>
