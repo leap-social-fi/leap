@@ -95,7 +95,6 @@ export class AuthRepository {
 				name,
 				username,
 			})
-			.onConflictDoNothing()
 			.returning(this.selectMe())
 			.then(takeUniqueOrThrow)
 	}

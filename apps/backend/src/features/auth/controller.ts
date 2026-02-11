@@ -1,5 +1,4 @@
 import type { AuthJwtPayload } from '@leap/shared/types/auth'
-import type { CookieOptions } from 'hono/utils/cookie'
 import type {
 	AuthCache,
 	CheckUsernameProps,
@@ -21,11 +20,12 @@ import { IS_PRODUCTION } from '@/constants/app'
 import { KEY_ACCESS_TOKEN } from '@/constants/key'
 import { AuthRepository } from '@/features/auth/repository'
 import config, { type Config } from '@/libs/config'
+import { isDuplicateKey } from '@/libs/error'
 import logger from '@/libs/logger'
 import { response } from '@/utils/response'
 import { getAvatar } from '@/utils/user'
 
-class AuthController {
+export default class AuthController {
 	private repo: AuthRepository
 	private conf: Config
 
@@ -49,10 +49,10 @@ class AuthController {
 
 	public async checkUsername({ c, username }: CheckUsernameProps) {
 		const available = await this.repo.checkUsername(username)
-		const message = `${username} is ${available ? 'available' : 'not available'}`
+
 		return response({
 			c,
-			message,
+			message: `Username ${username} is ${available ? 'available' : 'unavailable'}`,
 			data: {
 				available,
 			},
@@ -63,17 +63,16 @@ class AuthController {
 		return response({
 			c,
 			message: 'Successfully retrieved user information!',
-			data: this.userMe(user),
+			data: this.formatUser(user),
 		})
 	}
 
 	public async verify({ c, nonce, message, signature }: VerifyProps) {
-		const exists = this.repo.nonce.has(nonce)
-		if (!exists) {
+		if (!this.repo.nonce.has(nonce)) {
 			return response({
 				c,
-				message: 'Invalid nonce',
 				status: status.UNPROCESSABLE_ENTITY,
+				message: 'Invalid nonce',
 			})
 		}
 
@@ -81,66 +80,26 @@ class AuthController {
 			const siwe = new SiweMessage(message)
 			const { data } = await siwe.verify({ signature })
 
-			const address = data.address
-			const user = await this.repo.getUserMeByAddress(address)
+			const user = await this.repo.getUserMeByAddress(data.address)
 			if (user) {
 				await this.repo.updateLastLoggedIn(user.id)
 			}
 
-			const { token, maxAge } = await this.setAccessToken(address, user?.id)
-			setCookie(c, KEY_ACCESS_TOKEN, token, this.getCookieOptions(maxAge))
+			await this.setAuthCookie(c, data.address, user?.id)
 
 			return response({
 				c,
 				message: 'Successfully verified!',
-				data: this.userMe(user),
+				data: this.formatUser(user),
 			})
-		} catch (e) {
-			logger.error(e)
+		} catch (error) {
+			logger.error(error)
 			return response({
 				c,
 				status: status.INTERNAL_SERVER_ERROR,
 				message: 'Failed to verify signature',
 			})
 		}
-	}
-
-	protected async setAccessToken(address: string, userId?: bigint) {
-		const now = new Date()
-		const duration = parse(this.conf.AUTH_JWT_EXPIRES_IN)
-		const expDate = add(now, duration)
-		const maxAge = milliseconds(duration) / 1000
-
-		const payload: AuthJwtPayload = {
-			sub: address,
-			id: userId,
-			exp: getUnixTime(expDate),
-			iat: getUnixTime(now),
-			nbf: getUnixTime(now),
-		}
-
-		const token = await sign(payload, this.conf.AUTH_JWT_SECRET)
-		return {
-			token,
-			maxAge,
-		}
-	}
-
-	protected getCookieOptions(maxAge?: number): CookieOptions {
-		const cookie: CookieOptions = {
-			secure: false,
-			httpOnly: true,
-			sameSite: 'lax',
-			path: '/',
-			maxAge,
-		}
-
-		if (IS_PRODUCTION) {
-			cookie.secure = true
-			cookie.sameSite = 'Strict'
-		}
-
-		return cookie
 	}
 
 	public async newUser({ c, user, avatar, name, username, jwt }: NewUserProps) {
@@ -164,40 +123,26 @@ class AuthController {
 				throw new Error('Failed to create user')
 			}
 
-			const { token, maxAge } = await this.setAccessToken(
-				newUser.address,
-				newUser.id,
-			)
-			setCookie(c, KEY_ACCESS_TOKEN, token, this.getCookieOptions(maxAge))
+			await this.setAuthCookie(c, newUser.address, newUser.id)
 
 			return response({
 				c,
-				message: 'Successfully update user!',
-				data: this.userMe(newUser),
+				message: 'Successfully created user!',
+				data: this.formatUser(newUser),
 			})
-		} catch (e) {
-			logger.error(e)
-			return response({
-				c,
-				status: status.INTERNAL_SERVER_ERROR,
-				message: 'Failed to update user!',
-			})
+		} catch (error) {
+			return this.handleRegistrationError(c, error, username)
 		}
 	}
 
 	public async logout({ c, jwt, token }: LogoutProps) {
 		deleteCookie(c, KEY_ACCESS_TOKEN)
 
-		if (!jwt || !token) {
-			return response({
-				c,
-				message: 'Successfully logged out!',
+		if (jwt && token) {
+			await this.repo.blacklist.set(token, jwt.exp).catch((err) => {
+				logger.error('Failed to blacklist token:', err)
 			})
 		}
-
-		await this.repo.blacklist.set(token, jwt.exp).catch((err) => {
-			logger.error('Failed to blacklist token during logout:', err)
-		})
 
 		return response({
 			c,
@@ -205,14 +150,77 @@ class AuthController {
 		})
 	}
 
-	protected userMe(user?: AuthCache | null) {
-		if (!user) return null
+	/**
+	 * Helpers
+	 */
 
+	private async setAuthCookie(c: any, address: string, userId?: bigint) {
+		const { token, maxAge } = await this.generateAccessToken(address, userId)
+
+		setCookie(c, KEY_ACCESS_TOKEN, token, {
+			secure: IS_PRODUCTION,
+			httpOnly: true,
+			sameSite: IS_PRODUCTION ? 'Strict' : 'lax',
+			path: '/',
+			maxAge,
+		})
+	}
+
+	private async generateAccessToken(address: string, userId?: bigint) {
+		const now = new Date()
+		const duration = parse(this.conf.AUTH_JWT_EXPIRES_IN)
+		const expDate = add(now, duration)
+
+		const payload: AuthJwtPayload = {
+			sub: address,
+			id: userId,
+			exp: getUnixTime(expDate),
+			iat: getUnixTime(now),
+			nbf: getUnixTime(now),
+		}
+
+		const token = await sign(payload, this.conf.AUTH_JWT_SECRET)
+
+		return {
+			token,
+			maxAge: milliseconds(duration) / 1000,
+		}
+	}
+
+	private formatUser(user?: AuthCache | null) {
+		if (!user) return null
 		return {
 			...user,
 			avatar: getAvatar(user.avatar, user.username),
 		}
 	}
-}
 
-export default AuthController
+	private handleRegistrationError(c: any, error: unknown, username: string) {
+		const duplicateKey = isDuplicateKey(error)
+		if (!duplicateKey) {
+			logger.error(error)
+			return response({
+				c,
+				status: status.INTERNAL_SERVER_ERROR,
+				message: 'Failed to create user!',
+			})
+		}
+
+		switch (duplicateKey) {
+			case 'username':
+				return response({
+					c,
+					status: status.BAD_REQUEST,
+					message: `Username ${username} is already taken!`,
+					data: { username: 'Username already taken' },
+				})
+
+			default:
+				return response({
+					c,
+					status: status.UNPROCESSABLE_ENTITY,
+					message: `The ${duplicateKey} is already taken!`,
+				})
+		}
+	}
+}
