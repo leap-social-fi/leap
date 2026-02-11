@@ -20,63 +20,89 @@ interface AuthMiddleware {
 }
 
 export type AuthProps = AuthMiddleware['Variables']
-
 export type AuthMode = 'auth' | 'bypass' | 'identity'
 
 const repo = new AuthRepository()
 
-function auth(mode: AuthMode = 'auth'): MiddlewareHandler<AuthMiddleware> {
+const retrieveToken = (c: Context): string | undefined => {
+	return getCookie(c, KEY_ACCESS_TOKEN)
+}
+
+const parseJwt = async (token: string): Promise<AuthJwtPayload> => {
 	const { AUTH_JWT_SECRET } = config()
+	try {
+		const payload = await verify(token, AUTH_JWT_SECRET, 'HS256')
+		if (!payload) throw new Error()
+		return payload as AuthJwtPayload
+	} catch {
+		throw new ApiError(status.UNAUTHORIZED, 'Token verification failed')
+	}
+}
 
-	return createMiddleware<AuthMiddleware>(async (ctx: Context, next: Next) => {
-		const token = getCookie(ctx, KEY_ACCESS_TOKEN)
+const validateBlacklist = async (token: string): Promise<void> => {
+	const isBlacklisted = await repo.blacklist.has(token)
+	if (isBlacklisted) {
+		throw new ApiError(
+			status.UNAUTHORIZED,
+			'Token is invalid, please login again',
+		)
+	}
+}
 
-		if (!token) {
-			if (mode === 'bypass') return await next()
-			throw new ApiError(status.UNAUTHORIZED, 'Authorization token is missing')
-		}
+const resolveUser = async (id: string): Promise<AuthMe | null> => {
+	try {
+		const userId = BigInt(id)
+		if (userId <= 0n) return null
+		return await repo.getUserMeById(userId)
+	} catch {
+		return null
+	}
+}
 
+const processUserSession = async (
+	c: Context,
+	payload: AuthJwtPayload,
+	mode: AuthMode,
+): Promise<void> => {
+	if (!payload.id) {
+		if (mode === 'auth')
+			throw new ApiError(status.UNAUTHORIZED, 'Invalid user ID')
+		return
+	}
+
+	const user = await resolveUser(String(payload.id))
+	if (!user && mode === 'auth') {
+		throw new ApiError(status.UNAUTHORIZED, 'User not found')
+	}
+
+	if (user) {
+		c.set('user', user)
+	}
+}
+
+const authenticate = async (c: Context, mode: AuthMode): Promise<void> => {
+	const token = retrieveToken(c)
+
+	if (!token) {
+		if (mode === 'bypass') return
+		throw new ApiError(status.UNAUTHORIZED, 'Authorization token is missing')
+	}
+
+	const payload = await parseJwt(token)
+	await validateBlacklist(token)
+
+	c.set('jwt', payload)
+	c.set('token', token)
+
+	await processUserSession(c, payload, mode)
+}
+
+function auth(mode: AuthMode = 'auth'): MiddlewareHandler<AuthMiddleware> {
+	return createMiddleware<AuthMiddleware>(async (c: Context, next: Next) => {
 		try {
-			const payload = await verify(token, AUTH_JWT_SECRET, 'HS256')
-
-			if (mode === 'identity') {
-				if (!payload) {
-					throw new Error('Token verification failed')
-				}
-
-				ctx.set('jwt', payload)
-				ctx.set('token', token)
-				await next()
-				return
-			}
-
-			if (
-				!payload ||
-				typeof payload.id !== 'string' ||
-				BigInt(payload.id) <= 0n
-			) {
-				throw new Error('Token verification failed')
-			}
-
-			const isBlacklist = await repo.blacklist.has(token)
-			if (isBlacklist) {
-				throw new Error('Token is invalid, please login again')
-			}
-
-			const userId = payload.id
-			const user = await repo.getUserMeById(BigInt(userId))
-			if (!user) {
-				throw new Error('User not found')
-			}
-
-			ctx.set('user', user)
-			ctx.set('jwt', payload)
-			ctx.set('token', token)
+			await authenticate(c, mode)
 		} catch (err) {
-			if (err instanceof ApiError) {
-				throw err
-			}
-
+			if (err instanceof ApiError) throw err
 			throw new ApiError(status.UNAUTHORIZED, (err as Error).message)
 		}
 

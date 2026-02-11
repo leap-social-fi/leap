@@ -1,4 +1,5 @@
 import type { AuthJwtPayload } from '@leap/shared/types/auth'
+import type { CookieOptions } from 'hono/utils/cookie'
 import type {
 	AuthCache,
 	CheckUsernameProps,
@@ -9,13 +10,14 @@ import type {
 	VerifyProps,
 } from '@/features/auth/types'
 
-import { add, getUnixTime } from 'date-fns'
+import { add, getUnixTime, milliseconds } from 'date-fns'
 import { deleteCookie, setCookie } from 'hono/cookie'
 import { sign } from 'hono/jwt'
 import status from 'http-status'
 import { SiweMessage, generateNonce } from 'siwe'
 import { parse } from 'tinyduration'
 
+import { IS_PRODUCTION } from '@/constants/app'
 import { KEY_ACCESS_TOKEN } from '@/constants/key'
 import { AuthRepository } from '@/features/auth/repository'
 import config, { type Config } from '@/libs/config'
@@ -86,15 +88,7 @@ class AuthController {
 			}
 
 			const { token, maxAge } = await this.setAccessToken(address, user?.id)
-			setCookie(c, KEY_ACCESS_TOKEN, token, {
-				httpOnly: true,
-				// secure: true,
-				// sameSite: 'Strict',
-				secure: false,
-				sameSite: 'lax',
-				path: '/',
-				maxAge,
-			})
+			setCookie(c, KEY_ACCESS_TOKEN, token, this.getCookieOptions(maxAge))
 
 			return response({
 				c,
@@ -114,8 +108,8 @@ class AuthController {
 	protected async setAccessToken(address: string, userId?: bigint) {
 		const now = new Date()
 		const duration = parse(this.conf.AUTH_JWT_EXPIRES_IN)
-		const seconds = Number(duration.days) * 24 * 60 * 60
 		const expDate = add(now, duration)
+		const maxAge = milliseconds(duration) / 1000
 
 		const payload: AuthJwtPayload = {
 			sub: address,
@@ -128,8 +122,25 @@ class AuthController {
 		const token = await sign(payload, this.conf.AUTH_JWT_SECRET)
 		return {
 			token,
-			maxAge: seconds || 0,
+			maxAge,
 		}
+	}
+
+	protected getCookieOptions(maxAge?: number): CookieOptions {
+		const cookie: CookieOptions = {
+			secure: false,
+			httpOnly: true,
+			sameSite: 'lax',
+			path: '/',
+			maxAge,
+		}
+
+		if (IS_PRODUCTION) {
+			cookie.secure = true
+			cookie.sameSite = 'Strict'
+		}
+
+		return cookie
 	}
 
 	public async newUser({ c, user, avatar, name, username, jwt }: NewUserProps) {
@@ -157,15 +168,7 @@ class AuthController {
 				newUser.address,
 				newUser.id,
 			)
-			setCookie(c, KEY_ACCESS_TOKEN, token, {
-				httpOnly: true,
-				// secure: true,
-				// sameSite: 'Strict',
-				secure: false,
-				sameSite: 'lax',
-				path: '/',
-				maxAge,
-			})
+			setCookie(c, KEY_ACCESS_TOKEN, token, this.getCookieOptions(maxAge))
 
 			return response({
 				c,
