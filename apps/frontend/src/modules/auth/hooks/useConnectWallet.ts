@@ -1,6 +1,6 @@
 import type { VerifyRequest } from '@leap/shared/schema/auth'
 
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { createSiweMessage } from 'viem/siwe'
 import {
 	type Connector,
@@ -20,14 +20,18 @@ export const useConnectWallet = () => {
 	const {
 		verifySignStatus,
 		connectWalletStatus,
+		id,
 		setAuth,
+		resetAuth,
 		setVerifySignStatus,
 		setConnectWalletStatus,
 	} = useAuthContext()
 	const walletOptionsDialog = useDisclosure({ open: false })
 	const authStepDialog = useDisclosure({ open: false })
+	const profileFormDialog = useDisclosure({ open: false })
+	const verifyOwnershipDialog = useDisclosure({ open: false })
 
-	const { isConnected } = useConnection()
+	const { isConnected, address, chainId } = useConnection()
 	const { mutate: disconnectWallet } = useDisconnect()
 	const { mutateAsync: connectWallet } = useConnect()
 	const { refetch: refetchNonce } = useAuthNonce()
@@ -62,6 +66,44 @@ export const useConnectWallet = () => {
 		disconnectWallet()
 	}
 
+	const handleSignMessageVerify = async () => {
+		if (!address || !chainId) return
+
+		if (!authStepDialog.isOpen) authStepDialog.onOpen()
+
+		try {
+			const { data: dataNonce } = await refetchNonce()
+			if (!dataNonce?.data.token) throw new Error('Failed to get nonce')
+
+			// Handle Sign Message for Verify
+			const message = createSiweMessage({
+				address: address,
+				chainId: chainId,
+				domain: window.location.host,
+				nonce: dataNonce?.data.token,
+				uri: window.location.origin,
+				version: '1',
+				statement: 'Sign in to leap',
+			})
+
+			setVerifySignStatus('loading')
+			const signature = await signMessageAsync(
+				{ message },
+				{
+					onError: () => disconnectWallet(),
+				},
+			)
+
+			await handleVerify({
+				nonce: dataNonce.data.token,
+				message,
+				signature,
+			})
+		} catch {
+			handleCancelConnect()
+		}
+	}
+
 	const handleConnector = useCallback(
 		async (connector: Connector<CreateConnectorFn>) => {
 			handleSelectConnector()
@@ -70,33 +112,8 @@ export const useConnectWallet = () => {
 				const { accounts, chainId } = await connectWallet({ connector })
 				if (!chainId || accounts.length === 0) return
 
-				const { data: dataNonce } = await refetchNonce()
-				if (!dataNonce?.data.token) throw new Error('Failed to get nonce')
-
 				// Handle Sign Message for Verify
-				const message = createSiweMessage({
-					address: accounts[0],
-					chainId: chainId,
-					domain: window.location.host,
-					nonce: dataNonce?.data.token,
-					uri: window.location.origin,
-					version: '1',
-					statement: 'Sign in to leap',
-				})
-
-				setVerifySignStatus('loading')
-				const signature = await signMessageAsync(
-					{ message },
-					{
-						onError: () => disconnectWallet(),
-					},
-				)
-
-				await handleVerify({
-					nonce: dataNonce.data.token,
-					message,
-					signature,
-				})
+				await handleSignMessageVerify()
 			} catch {
 				handleCancelConnect()
 			}
@@ -104,12 +121,45 @@ export const useConnectWallet = () => {
 		[disconnectWallet, connectWallet, refetchNonce, signMessageAsync, verify],
 	)
 
+	// Verify Ownership Dialog
+	const handleVerifyOwnershipClose = () => {
+		disconnectWallet()
+		resetAuth()
+		verifyOwnershipDialog.onClose()
+	}
+
+	useEffect(() => {
+		if (verifySignStatus === 'connect' && !id && isConnected) {
+			profileFormDialog.onOpen()
+		} else if (
+			verifySignStatus === 'disconnect' &&
+			!authStepDialog.isOpen &&
+			isConnected
+		) {
+			verifyOwnershipDialog.onOpen()
+		} else {
+			profileFormDialog.onClose()
+			verifyOwnershipDialog.onClose()
+		}
+	}, [
+		id,
+		isConnected,
+		verifySignStatus,
+		profileFormDialog,
+		verifyOwnershipDialog,
+		authStepDialog,
+	])
+
 	return {
 		isConnected,
 		authStepDialog,
 		walletOptionsDialog,
+		profileFormDialog,
+		verifyOwnershipDialog,
 		verifySignStatus,
 		connectWalletStatus,
+		handleSignMessageVerify,
 		handleConnector,
+		handleVerifyOwnershipClose,
 	}
 }

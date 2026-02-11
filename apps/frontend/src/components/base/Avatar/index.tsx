@@ -19,7 +19,7 @@ const Avatar: React.FC<
 			data-slot="avatar"
 			data-size={size}
 			className={cn(
-				'group/avatar relative flex size-12 shrink-0 select-none rounded-full after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-20 data-[size=md]:size-16 data-[size=sm]:size-8 dark:after:mix-blend-lighten',
+				'group/avatar relative flex size-12 shrink-0 select-none rounded-full after:absolute after:inset-0 after:rounded-full after:border after:border-primary/50 after:mix-blend-darken data-[size=lg]:size-20 data-[size=md]:size-16 data-[size=sm]:size-8 dark:after:mix-blend-lighten',
 				className,
 			)}
 			{...props}
