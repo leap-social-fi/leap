@@ -102,7 +102,15 @@ export default class AuthController {
 		}
 	}
 
-	public async newUser({ c, user, avatar, name, username, jwt }: NewUserProps) {
+	public async newUser({
+		c,
+		user,
+		avatar,
+		name,
+		username,
+		bio,
+		jwt,
+	}: NewUserProps) {
 		if (user) {
 			return response({
 				c,
@@ -116,6 +124,7 @@ export default class AuthController {
 				name,
 				avatar,
 				username,
+				bio,
 				address: jwt.sub,
 			})
 

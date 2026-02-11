@@ -85,6 +85,7 @@ export class AuthRepository {
 		avatar,
 		name,
 		username,
+		bio,
 	}: CreateUserProps) {
 		return await this.db
 			.insert(users)
@@ -94,6 +95,7 @@ export class AuthRepository {
 				avatar,
 				name,
 				username,
+				bio,
 			})
 			.returning(this.selectMe())
 			.then(takeUniqueOrThrow)

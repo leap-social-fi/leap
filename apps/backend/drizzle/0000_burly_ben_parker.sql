@@ -84,7 +84,7 @@ CREATE TABLE "users" (
 	"address" varchar(42) NOT NULL,
 	"name" varchar(64) NOT NULL,
 	"username" varchar(32) NOT NULL,
-	"bio" text,
+	"bio" jsonb,
 	"avatar" varchar(32) NOT NULL,
 	"last_logged_in" timestamp DEFAULT now() NOT NULL,
 	"total_articles" integer DEFAULT 0 NOT NULL,

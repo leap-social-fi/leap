@@ -1,12 +1,13 @@
 import { z } from 'zod'
 
-import { address, avatar, bio, name, snowflakeId, username } from './base'
+import { EDITOR_TYPE } from '../constants/tiptap'
+import { address, avatar, content, name, snowflakeId, username } from './base'
 
 export const updateUserRequestSchema = z.object({
 	name,
 	username,
-	// bio,
 	avatar,
+	bio: content(EDITOR_TYPE.LITE, true, true),
 })
 
 export const userResponseSchema = z.object({
@@ -14,7 +15,7 @@ export const userResponseSchema = z.object({
 	address,
 	name,
 	username,
-	bio,
+	bio: content(EDITOR_TYPE.LITE, true),
 	avatar,
 	totalArticles: z.number(),
 	totalReactions: z.number(),

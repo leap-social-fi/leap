@@ -1,9 +1,13 @@
-import type { DiceBearAvatar } from '../types/user'
+import type { IEditorType } from '../types/tiptap'
+import type { IDiceBearAvatar } from '../types/user'
 
+import { Node } from '@tiptap/pm/model'
 import { z } from 'zod'
 
 import { IMAGE_EXTENSIONS } from '../constants/base'
+import { EDITOR_TYPE } from '../constants/tiptap'
 import { DICE_BEAR_AVATAR, DICE_BEAR_PREFIX } from '../constants/user'
+import { schema } from '../libs/tiptap'
 import { TiptapNode } from './tiptap'
 
 export const snowflakeId = z
@@ -80,7 +84,7 @@ export const avatar = z
 		const avatarType = val.substring(DICE_BEAR_PREFIX.length)
 		const avatarMap = new Set(DICE_BEAR_AVATAR)
 
-		if (!avatarMap.has(avatarType as DiceBearAvatar)) {
+		if (!avatarMap.has(avatarType as IDiceBearAvatar)) {
 			ctx.addIssue({
 				code: 'custom',
 				message: 'Invalid dice-bear avatar type',
@@ -136,17 +140,58 @@ export const slug = z
 		example: 'slug-example',
 	})
 
-export const bio = z
-	.looseObject({
+export const formContent = (isOptional: boolean = false) => {
+	const base = z.object({
 		type: z.literal('doc'),
 		content: z.array(TiptapNode),
 	})
-	.optional()
-	.nullable()
-	.meta({
-		example: 'Hello, I am a rizal',
-	})
 
-export const content = z.string().nullable().meta({
-	example: 'Hello, I am a rizal',
-})
+	if (isOptional) {
+		return base.optional().nullable()
+	}
+
+	return base
+}
+
+export const content = (
+	mode: IEditorType = EDITOR_TYPE.LITE,
+	isOptional: boolean = false,
+	isRequest: boolean = false,
+) => {
+	const mock = {
+		type: 'doc',
+		content: [
+			{
+				type: 'paragraph',
+				content: [
+					{
+						type: 'text',
+						text: 'Hello, I am a rizal',
+					},
+				],
+			},
+		],
+	}
+
+	const base = z
+		.string()
+		.refine((val) => {
+			try {
+				const content = JSON.parse(val)
+				const node = Node.fromJSON(schema[mode], content)
+				node.check()
+				return true
+			} catch {
+				return false
+			}
+		})
+		.meta({
+			example: isRequest ? JSON.stringify(mock) : mock,
+		})
+
+	if (isOptional) {
+		return base.optional().nullable()
+	}
+
+	return base
+}
