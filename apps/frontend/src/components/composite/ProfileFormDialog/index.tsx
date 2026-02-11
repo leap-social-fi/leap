@@ -61,7 +61,7 @@ const ProfileFormDialog: React.FC<ProfileFormDialogProps> = ({
 	}
 
 	const handleSaveNewUser = handleSubmit(({ bio, ...data }) => {
-		mutate({ ...data })
+		mutate({ ...data, bio: bio ? JSON.stringify(bio) : null })
 		onClose()
 	})
 

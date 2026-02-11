@@ -10,7 +10,8 @@
     "./constants/*": "./src/constants/*.ts",
     "./types/*": "./src/types/*.ts",
     "./schema/*": "./src/schema/*.ts",
-    "./utils/*": "./src/utils/*.ts"
+    "./utils/*": "./src/utils/*.ts",
+    "./libs/*": "./src/libs/*.ts"
   },
   "scripts": {
     "build": "bunx --bun tsc --build && bunx --bun tsc-alias -p tsconfig.app.json",
@@ -21,6 +22,9 @@
     "check": "biome check ./src --write"
   },
   "dependencies": {
+    "@tiptap/core": "^3.19.0",
+    "@tiptap/pm": "^3.19.0",
+    "@tiptap/starter-kit": "^3.19.0",
     "hono": "^4.11.7",
     "zod": "^4.3.6"
   },

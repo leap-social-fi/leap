@@ -1,10 +1,11 @@
 import z from 'zod'
 
+import { EDITOR_TYPE } from '../constants/tiptap'
 import {
 	address,
 	avatar,
-	bio,
-	// content,
+	content,
+	formContent,
 	image,
 	name,
 	snowflakeId,
@@ -38,13 +39,13 @@ export const newUserSchemaBase = {
 // Note: For Frontend
 export const newUserSchemaForm = z.object({
 	...newUserSchemaBase,
-	bio,
+	bio: formContent(true),
 })
 
 // Note: For Backend
 export const newUserSchema = z.object({
 	...newUserSchemaBase,
-	// bio: content
+	bio: content(EDITOR_TYPE.LITE, true, true),
 })
 
 export type NewUserForm = z.infer<typeof newUserSchemaForm>

@@ -1,5 +1,5 @@
-import type { DiceBearAvatar } from '../types/user'
+import type { IDiceBearAvatar } from '../types/user'
 
-export const diceBearUrl = (style: DiceBearAvatar, seed: string) => {
+export const diceBearUrl = (style: IDiceBearAvatar, seed: string) => {
 	return `https://api.dicebear.com/9.x/${style}/svg?seed=${seed}`
 }

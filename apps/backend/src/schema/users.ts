@@ -2,9 +2,9 @@ import { relations } from 'drizzle-orm'
 import {
 	bigint,
 	integer,
+	jsonb,
 	pgTable,
 	primaryKey,
-	text,
 	timestamp,
 	varchar,
 } from 'drizzle-orm/pg-core'
@@ -21,7 +21,7 @@ export const users = pgTable('users', {
 	address: varchar('address', { length: 42 }).notNull().unique(),
 	name: varchar('name', { length: 64 }).notNull(),
 	username: varchar('username', { length: 32 }).notNull().unique(),
-	bio: text('bio'),
+	bio: jsonb('bio'),
 	avatar: varchar('avatar', { length: 32 }).notNull(),
 	lastLoggedIn: timestamp('last_logged_in').defaultNow().notNull(),
 	totalArticles: integer('total_articles').default(0).notNull(),

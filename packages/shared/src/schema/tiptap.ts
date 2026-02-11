@@ -1,4 +1,4 @@
-import type { IMarkTiptap, ITiptapNode } from '../types/tiptap-node'
+import type { IMarkTiptap, ITiptapNode } from '../types/tiptap'
 
 import z from 'zod'
 
