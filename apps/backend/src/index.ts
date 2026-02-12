@@ -11,6 +11,8 @@ import logger from './libs/logger'
 import { Server } from './server'
 import './utils/zod'
 
+import { IS_PRODUCTION } from '@/constants/app'
+import { createBucketIfNotExists, initMinio } from '@/libs/minio'
 import { checkConnection, initPostgres } from '@/libs/postgresql'
 import { initRedis } from '@/libs/redis'
 
@@ -31,6 +33,13 @@ async function main() {
 
 	logger.info('Initializing redis...')
 	initRedis()
+
+	logger.info('Initializing minio...')
+	initMinio()
+
+	if (!IS_PRODUCTION) {
+		await createBucketIfNotExists(conf.MINIO_BUCKET_NAME)
+	}
 
 	logger.info('Starting backend server...')
 	const app = new Hono()

@@ -40,6 +40,12 @@ const configSchema = z.object({
 	AUTH_JWT_EXPIRES_IN: z.iso.duration().default('P7D'),
 	AUTH_NONCE_EXPIRES_IN: z.iso.duration().default('P2M'),
 	AUTH_CACHE_EXPIRES_IN: z.iso.duration().default('P5M'),
+	MINIO_ENDPOINT: z.string().default('localhost'),
+	MINIO_PORT: z.coerce.number().default(9000),
+	MINIO_USE_SSL: z.stringbool().default(false),
+	MINIO_ACCESS_KEY: z.string(),
+	MINIO_SECRET_KEY: z.string(),
+	MINIO_BUCKET_NAME: z.string().default('leap'),
 })
 
 export type Config = z.infer<typeof configSchema>
