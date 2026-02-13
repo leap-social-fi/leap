@@ -119,7 +119,7 @@ export type UploadRequest = z.infer<typeof uploadRequestSchema>
 export const uploadResponseSchema = z.object({
 	id: snowflakeId,
 	path: z.string().meta({
-		example: '/temp/image.jpg',
+		example: 'http://localhost:9000/leap/temp/image/1471799829100236800.jpg',
 	}),
 	type: z.enum(UPLOAD_TYPE),
 })

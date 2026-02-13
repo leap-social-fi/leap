@@ -60,6 +60,7 @@ export default class StorageController {
 				c,
 				message: 'Successfully uploaded file!',
 				data: {
+					id: identity,
 					type: type,
 					file: getStorageUrl(fullPath),
 				},
