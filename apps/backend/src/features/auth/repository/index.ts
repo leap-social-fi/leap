@@ -17,9 +17,6 @@ export class AuthRepository {
 	public blacklist: BlacklistStore
 	private user: UserStore
 
-	readonly auth_user_key = 'auth:user'
-	readonly auth_jwt_blacklist_key = 'auth:jwt:blacklist'
-
 	constructor() {
 		this.db = postgres()
 		this.nonce = new NonceStore()

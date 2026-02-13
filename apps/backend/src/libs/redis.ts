@@ -1,11 +1,11 @@
 import { RedisClient } from 'bun'
 
 import config, { type Config } from './config'
-import logger from './logger'
 
 let redisClient: RedisClient | undefined
+let subscribeClient: RedisClient | undefined
 
-export function initRedis() {
+export async function initRedis() {
 	const conf = config()
 
 	redisClient = new RedisClient(
@@ -16,9 +16,8 @@ export function initRedis() {
 		},
 	)
 
-	redisClient.connect().catch((err: Error) => {
-		logger.error({ err }, 'Failed to connect to Redis')
-	})
+	await redisClient.connect()
+	subscribeClient = await redisClient.duplicate()
 }
 
 export function redis() {
@@ -29,6 +28,16 @@ export function redis() {
 	}
 
 	return redisClient
+}
+
+export function redisSubscribe() {
+	if (!subscribeClient) {
+		throw new Error(
+			'Redis subscribe client not initialized. Please call initRedis() first.',
+		)
+	}
+
+	return subscribeClient
 }
 
 export class RedisStore {

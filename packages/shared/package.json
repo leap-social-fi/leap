@@ -26,10 +26,12 @@
     "@tiptap/pm": "^3.19.0",
     "@tiptap/starter-kit": "^3.19.0",
     "hono": "^4.11.7",
+    "image-size": "^2.0.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@leap/typescript-config": "workspace:*",
+    "@types/node": "^25.2.3",
     "concurrently": "^9.2.1",
     "tsc-alias": "^1.8.16"
   }

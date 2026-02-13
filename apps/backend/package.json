@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "0.0.0",
   "scripts": {
-    "dev": "bun run --bun --hot src/index.ts",
+    "dev": "bun run --bun --watch --no-clear-screen src/index.ts",
     "build": "bun run --bun scripts/build.ts",
     "lint": "biome lint ./src --write",
     "format": "biome format ./src --write",

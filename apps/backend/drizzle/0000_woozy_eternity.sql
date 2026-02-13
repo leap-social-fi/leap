@@ -1,5 +1,6 @@
 CREATE TYPE "public"."article_reaction_type" AS ENUM('like');--> statement-breakpoint
 CREATE TYPE "public"."article_status" AS ENUM('draft', 'published');--> statement-breakpoint
+CREATE TYPE "public"."temporary_storage_type" AS ENUM('image', 'avatar');--> statement-breakpoint
 CREATE TABLE "article_views" (
 	"id" bigint PRIMARY KEY NOT NULL,
 	"article_id" bigint NOT NULL,
@@ -70,6 +71,14 @@ CREATE TABLE "tags" (
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "tags_name_unique" UNIQUE("name"),
 	CONSTRAINT "tags_slug_unique" UNIQUE("slug")
+);
+--> statement-breakpoint
+CREATE TABLE "temporary_storage" (
+	"id" bigint PRIMARY KEY NOT NULL,
+	"type" "temporary_storage_type" NOT NULL,
+	"ext" varchar(16) NOT NULL,
+	"expired_at" timestamp NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "followers" (

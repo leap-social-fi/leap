@@ -5,6 +5,8 @@ import logger from '@/libs/logger'
 
 let minioClient: Minio.Client | undefined
 
+export type IMinio = Minio.Client
+
 export function initMinio() {
 	const conf = config()
 	minioClient = new Minio.Client({

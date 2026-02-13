@@ -8,6 +8,7 @@ import { IMAGE_EXTENSIONS } from '../constants/base'
 import { EDITOR_TYPE } from '../constants/tiptap'
 import { DICE_BEAR_AVATAR, DICE_BEAR_PREFIX } from '../constants/user'
 import { schema } from '../libs/tiptap'
+import { isValidId } from '../utils/check'
 import { TiptapNode } from './tiptap'
 
 export const snowflakeId = z
@@ -22,7 +23,7 @@ export const snowflakeId = z
 			}
 
 			const strVal = typeof val === 'number' ? val.toString() : val
-			return !/^\d+$/.test(strVal) || strVal.length < 18 || strVal.length > 20
+			return !isValidId(strVal)
 		})()
 
 		const strVal = typeof val === 'number' ? val.toString() : val

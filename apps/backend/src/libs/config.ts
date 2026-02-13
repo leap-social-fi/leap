@@ -46,6 +46,7 @@ const configSchema = z.object({
 	MINIO_ACCESS_KEY: z.string(),
 	MINIO_SECRET_KEY: z.string(),
 	MINIO_BUCKET_NAME: z.string().default('leap'),
+	MINIO_PUBLIC_URL: z.url().default('http://localhost:9000'),
 })
 
 export type Config = z.infer<typeof configSchema>
