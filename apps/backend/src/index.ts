@@ -11,8 +11,11 @@ import logger from './libs/logger'
 import { Server } from './server'
 import './utils/zod'
 
-import { checkConnection, initPostgres } from '@/libs/postgresql'
-import { initRedis } from '@/libs/redis'
+import { IS_PRODUCTION } from '@/constants/app'
+import { createBucketIfNotExists, initMinio } from '@/libs/minio'
+import postgres, { checkConnection, initPostgres } from '@/libs/postgresql'
+import redis, { initRedis, redisSubscribe } from '@/libs/redis'
+import QueueService from '@/services/queue'
 
 // @ts-expect-error big int to json
 BigInt.prototype.toJSON = function () {
@@ -30,7 +33,19 @@ async function main() {
 	checkConnection()
 
 	logger.info('Initializing redis...')
-	initRedis()
+	await initRedis()
+
+	logger.info('Initializing minio...')
+	initMinio()
+
+	if (!IS_PRODUCTION) {
+		await createBucketIfNotExists(conf.MINIO_BUCKET_NAME)
+	}
+
+	logger.info('Initializing Queue Service...')
+	const queue = new QueueService()
+	await queue.init()
+	await queue.subscribe()
 
 	logger.info('Starting backend server...')
 	const app = new Hono()
@@ -53,9 +68,13 @@ async function main() {
 		process.exit(1)
 	})
 
-	process.on('SIGTERM', () => {
+	process.on('SIGTERM', async () => {
 		logger.info('SIGTERM signal received')
 		logger.info('Closing http server')
+		await postgres().$client.end()
+		await queue.unsubscribe()
+		redisSubscribe().close()
+		redis().close()
 		process.exit(0)
 	})
 

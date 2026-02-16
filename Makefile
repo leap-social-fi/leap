@@ -1,3 +1,10 @@
+ifneq (,$(wildcard .env))
+    include .env
+    export
+else
+    $(error The .env file is missing! Please create it to proceed)
+endif
+
 ## help: print this help message
 .PHONY: help
 help:
@@ -148,3 +155,12 @@ types/backend:
 .PHONY: deploy/contract
 deploy/contract: confirm
 	./scripts/deploy.sh
+
+## backend/recreate-db: Recreate the database
+.PHONY: backend/recreate-db
+backend/recreate-db: confirm
+	@echo "Recreating database $(POSTGRES_DB)..."
+	docker exec -e PGPASSWORD=$(POSTGRES_PASSWORD) postgres psql -U $(POSTGRES_USER) -d postgres -c "DROP DATABASE IF EXISTS $(POSTGRES_DB)"
+	docker exec -e PGPASSWORD=$(POSTGRES_PASSWORD) postgres psql -U $(POSTGRES_USER) -d postgres -c "CREATE DATABASE $(POSTGRES_DB)"
+	@echo "Running migrations..."
+	cd apps/backend && bun run db:migrate

@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "0.0.0",
   "scripts": {
-    "dev": "bun run --bun --hot src/index.ts",
+    "dev": "bun run --bun --watch --no-clear-screen src/index.ts",
     "build": "bun run --bun scripts/build.ts",
     "lint": "biome lint ./src --write",
     "format": "biome format ./src --write",
@@ -26,6 +26,7 @@
     "hono": "^4.11.5",
     "hono-openapi": "^1.1.2",
     "http-status": "^2.1.0",
+    "minio": "^8.0.6",
     "pg": "^8.18.0",
     "pino": "^10.2.1",
     "siwe": "^3.0.0",

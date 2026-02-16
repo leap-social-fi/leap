@@ -92,8 +92,7 @@ export default class AuthController {
 				message: 'Successfully verified!',
 				data: this.formatUser(user),
 			})
-		} catch (error) {
-			logger.error(error)
+		} catch {
 			return response({
 				c,
 				status: status.INTERNAL_SERVER_ERROR,

@@ -1,5 +1,5 @@
 {
-  "id": "d62833e9-98c2-417b-9618-5d264aaeef79",
+  "id": "1d1353cd-ff29-4d69-9a86-545a9c527277",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -577,6 +577,50 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.temporary_storage": {
+      "name": "temporary_storage",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "temporary_storage_type",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ext": {
+          "name": "ext",
+          "type": "varchar(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expired_at": {
+          "name": "expired_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.followers": {
       "name": "followers",
       "schema": "",
@@ -778,6 +822,14 @@
       "values": [
         "draft",
         "published"
+      ]
+    },
+    "public.temporary_storage_type": {
+      "name": "temporary_storage_type",
+      "schema": "public",
+      "values": [
+        "image",
+        "avatar"
       ]
     }
   },

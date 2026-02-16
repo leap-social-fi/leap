@@ -76,6 +76,7 @@ function validator<
 	target: Target,
 	schema: T,
 	options?: ResolverReturnType['options'],
+	bypassSchema: boolean = false,
 ): MiddlewareHandler<E, P, V> {
 	const middleware = baseValidator(target, async (value) => {
 		let validatorValue = value
@@ -114,13 +115,18 @@ function validator<
 	})
 
 	// @ts-expect-error disable linter for this line
-	return Object.assign(middleware, {
-		[uniqueSymbol]: {
-			target,
-			...resolver(schema, options),
-			options,
-		},
-	})
+	return Object.assign(
+		middleware,
+		bypassSchema
+			? {}
+			: {
+					[uniqueSymbol]: {
+						target,
+						...resolver(schema, options),
+						options,
+					},
+				},
+	)
 }
 
 export default validator
