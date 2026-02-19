@@ -1,5 +1,6 @@
 import type { VerifyRequest } from '@leap/shared/schema/auth'
 
+import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { useCallback, useEffect } from 'react'
 import { createSiweMessage } from 'viem/siwe'
 import {
@@ -11,12 +12,15 @@ import {
 	useSignMessage,
 } from 'wagmi'
 
+import { ROUTES } from '@/constants/routes'
 import { useAuthContext } from '@/contexts/auth/Auth.context'
 import { useDisclosure } from '@/hooks/useDisclosure'
 import { useAuthVerify } from '@/modules/auth/hooks/mutations'
 import { useAuthNonce } from '@/modules/auth/hooks/queries'
 
 export const useConnectWallet = () => {
+	const routerState = useRouterState()
+	const navigate = useNavigate()
 	const {
 		verifySignStatus,
 		connectWalletStatus,
@@ -54,6 +58,10 @@ export const useConnectWallet = () => {
 
 		if (responseVerify.data) {
 			setAuth({ ...responseVerify.data })
+
+			if (routerState.location.href === ROUTES.landingPage.path) {
+				navigate({ to: ROUTES.home.path })
+			}
 		}
 		authStepDialog.onClose()
 	}
