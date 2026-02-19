@@ -2,6 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 
 import Button from '@/components/base/Button'
 import Each from '@/components/base/Each'
+import { ROUTES } from '@/constants/routes'
 
 export const TrendingArticles = () => {
 	const navigate = useNavigate()
@@ -41,7 +42,7 @@ export const TrendingArticles = () => {
 					</h2>
 					<Button
 						className="flex items-center gap-1 font-bold text-sm text-white"
-						onClick={() => navigate({ to: '/home' })}
+						onClick={() => navigate({ to: ROUTES.home.path })}
 					>
 						See all
 					</Button>

@@ -28,7 +28,7 @@ const PortfolioPageContainer = () => {
 				defaultValue={router.location.search.tab || 'creator'}
 				className="w-full"
 			>
-				<div className="sticky top-0 z-30 flex border-gray-200 border-b bg-white px-4 py-5 dark:border-slate-800/80 dark:bg-background">
+				<div className="sticky top-0 z-30 flex border-gray-200 border-b bg-white px-4 py-5 dark:border-surface dark:bg-background">
 					<Tabs.List className="flex w-full gap-1 border-slate-100 border-b dark:border-slate-800 dark:bg-surface">
 						<Each
 							of={listTabs}
