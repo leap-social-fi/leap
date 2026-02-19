@@ -1,6 +1,7 @@
 import { IconChevronLeft, IconShare } from '@tabler/icons-react'
 import { useNavigate } from '@tanstack/react-router'
 
+import { ROUTES } from '@/constants/routes'
 import CommentsDrawer from '@/containers/article-detail/components/CommentsDrawer'
 import { useDisclosure } from '@/hooks/useDisclosure'
 
@@ -16,7 +17,7 @@ const ArticleDetailPageContainer = () => {
 				<div className="fixed top-0 right-0 left-0 z-50 mx-auto flex h-16 max-w-120 items-center justify-between bg-white/90 px-4 backdrop-blur-xl dark:bg-background/80">
 					<div
 						className="flex cursor-pointer items-center justify-center rounded-xl border border-gray-200 bg-white p-1.5 dark:border-white/10 dark:bg-surface"
-						onClick={() => navigate({ to: '/home' })}
+						onClick={() => navigate({ to: ROUTES.home.path })}
 					>
 						<IconChevronLeft
 							size={22}
@@ -96,7 +97,7 @@ const ArticleDetailPageContainer = () => {
 					</div>
 				</div>
 				<div className="fixed right-0 bottom-0 left-0 z-50 mx-auto max-w-120 p-4">
-					<div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/60 p-4 shadow-2xl backdrop-blur-xl dark:bg-slate-800/50">
+					<div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/60 p-4 shadow-2xl backdrop-blur-xl dark:bg-surface">
 						<div className="flex flex-col">
 							<div className="flex items-center gap-2">
 								<span className="font-bold text-lg text-slate-700 dark:text-white">

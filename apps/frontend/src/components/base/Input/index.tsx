@@ -12,7 +12,7 @@ const Input: React.FC<InputProps> = ({
 	...props
 }) => {
 	return (
-		<div className="flex flex-col gap-2">
+		<div className="flex w-full flex-col gap-2">
 			{label && <div>{label}</div>}
 			<InputPrimitive
 				type={type}
